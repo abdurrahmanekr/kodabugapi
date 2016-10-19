@@ -1,0 +1,31 @@
+Merhaba, bu döküman kodalog servis için geliştirilmiştir.
+
+a.b.c seklinde tüm dökümanın istenilen methodu veya amaçı tespit edilebilir.
+a -> Uygulama
+b -> Bir Amaç veya Kullanımda bulana gerekli bir konu başlığı
+c -> Amaça ait içeriğin maddesi. Bu başlıklarda genellikle merhod veya o konumda ne yaptığıdır.
+
+///A listesi 
+________________________
+1 Servis
+
+
+///B listesi
+________________________
+1 Güvenlik
+2 Loading
+3 Linq
+
+///C listesi
+________________________
+1 ctrlVandalism
+
+
+1.1.1
+	ctrlVandalism :
+		Saldırıları önlemek için geliştrilmiştir. Amacı sunucuda bulunan url açıklarını, parametreye girilen,
+		sql injection açıklarını bularak, bunun bir saldırı olduğunu anlamaktır.
+
+1.2.1
+	open:
+		istenilen servisi açar.

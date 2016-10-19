@@ -7,28 +7,58 @@
 		function __construct()
 		{
 			$this->getUrl();
-			$this->open();
+			// vandalizm (saldırı) kontrolü yapılıyor. bkz: [1.1.1]
+			$log = $this->ctrlVandalism();
+			if ($log)
+				$this->open($log);
+			else
+				echo "Not-Authorised";
 		}
 
-		public function getUrl() {
-	        $this->url = isset($_GET["url"]) ? $_GET["url"] : null;
-	        if ($this->url != null) {
-	            $this->url = rtrim($this->url, "/");
-	            $this->url = explode("/", $this->url);
-	        } else {
-	            unset($this->url);
-	        }
-	    }
+		public function getUrl()
+		{
+			$this->url = isset($_GET["url"]) ? $_GET["url"] : null;
+			if ($this->url != null)
+			{
+				$this->url = rtrim($this->url, "/");
+				$this->url = explode("/", $this->url);
+			}
+			else
+				unset($this->url);
+		}
 
-	    public function open()
-	    {
-	    	// Alınan servis gerçekten varmı ?
-	    	if (isset($this->url[0]) && isset($this->url[1])) {
-    			if (file_exists("app/services/" . $this->url[1] . ".php")) {
-					// varsa dahil et ve çalıştır.
-					include "app/services/" . $this->url[1] . ".php";
-					new $this->url[1]();
-				}
-	    	}
-	    }
+		// 1.2.1
+		public function open($parameters)
+		{
+			// servis ctrlVandalism çalışınca tetiklenmesi açıkları engellemiş olur.
+			include_once "app/services/" . $this->url[1] . ".php";
+			new $this->url[1]($parameters);
+		}
+
+		// 1.1.1
+		private function ctrlVandalism()
+		{
+			$req = new Request();
+
+			// istek atıldı mı ?
+			if (!isset($this->url) || $this->url[0] != "service") 
+			{
+				return false;
+			}
+			// service/<Servis adı> girildi mi ?
+			else if (count($this->url) > 2)
+			{
+				return false;
+			}
+			// data var mı ? varsa nulldan farklı mı ve json mı ?
+			else if (!isset($req->get["data"]) || $req->get["data"] == null || json_decode(base64_decode($req->get["data"]), true) == null)
+			{
+				return false;
+			}
+			// istekte bulunduğu servis var mı ?
+			else if (!file_exists("app/services/" . $this->url[1] . ".php"))
+				return false;
+			
+			return json_decode(base64_decode($req->get["data"]), true);
+		}
 	}
