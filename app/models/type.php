@@ -2,7 +2,8 @@
 
 	class Type extends Database
 	{
-		public $qtype, $tpname;
+		public $qtype = null;
+		public $tpname = null;
 
 		public function save()
 		{

@@ -2,7 +2,13 @@
 
 	class Question extends Database
 	{
-		public $qid, $qusid, $qname, $qtype, $qoption, $qtrue, $qfrequency;
+		public $qid = null;
+		public $qusid = null;
+		public $qname = null;
+		public $qtype = null;
+		public $qoption = null;
+		public $qtrue = null;
+		public $qfrequency = null;
 
 		public function save()
 		{

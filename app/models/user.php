@@ -2,7 +2,12 @@
 
 	class User extends Database
 	{
-		public $usid, $name, $surname, $uspoint, $birth;
+		public $usid = null;
+		public $name = null;
+		public $surname = null;
+		public $uspoint = null;
+		public $birth = null;
+		public $auth = null;
 
 		public function save()
 		{
@@ -12,13 +17,15 @@
 												name = ?,
 												surname = ?,
 												uspoint = ?,
-												birth = ?");
+												birth = ?,
+												auth = ?");
 			$insert = $query->execute(array(
 				$this->usid,
 				$this->name,
 				$this->surname,
 				$this->uspoint,
-				$this->birth
+				$this->birth,
+				$this->auth
 			));
 			if ($insert)
 				return true;
@@ -33,7 +40,8 @@
 											name = ?,
 											surname = ?,
 											uspoint = ?,
-											birth = ?
+											birth = ?,
+											auth = ?
 									WHERE $where");
 			
 			$update = $query->execute($wValues);

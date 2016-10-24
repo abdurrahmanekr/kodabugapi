@@ -2,7 +2,12 @@
 
 	class Game extends Database
 	{
-		public $gid, $gusid, $grivalid, $uspoint, $rivalpoint, $gmaxpoint;
+		public $gid = null;
+		public $gusid = null;
+		public $grivalid = null;
+		public $uspoint = null;
+		public $rivalpoint = null;
+		public $gmaxpoint = null;
 
 		public function save()
 		{

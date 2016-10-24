@@ -9,6 +9,8 @@
 			$this->getUrl();
 			// vandalizm (saldırı) kontrolü yapılıyor. bkz: [1.1.1]
 			$log = $this->ctrlVandalism();
+			// Debug modunda önemlidir!
+			new Database();
 			if ($log)
 				$this->open($log);
 			else

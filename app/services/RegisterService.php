@@ -31,7 +31,7 @@
 		public function register($data)
 		{
 			$userId = $this->generateUserId();
-			// // user tablosu
+			// user tablosu
 			$user = new User();
 			$user->usid = $userId;
 			$user->name = $data["name"];
@@ -39,15 +39,18 @@
 			$user->uspoint = 0; 
 			$user->birth = $data["birth"];
 
+			// kullanıcı puanı
 			$point = new Point();
 			$point->usid = $userId;
+			$point->copo = 0;
+			$point->hepo = 0;
+			$point->bugpo = 0;
+			$point->fipo = 0;
+			$point->keypo = 0;
+			$point->last = 0;
 
-			return $point->save();
-
-				if ($point->save())
-			if ($user->save())
-				{
-					return "Başarılı";
-				}
+			if ($point->save())
+				if ($user->save())
+					return array("result" => array("usid" => $userId, "auth" => ""));
 		}
 	}

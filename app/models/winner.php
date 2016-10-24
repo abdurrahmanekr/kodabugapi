@@ -2,7 +2,9 @@
 
 	class Winner extends Database
 	{
-		public $gid, $usid, $windate;
+		public $gid = null;
+		public $usid = null;
+		public $windate = null;
 
 		public function save()
 		{

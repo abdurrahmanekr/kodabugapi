@@ -2,7 +2,8 @@
 
 	class Follow extends Database
 	{
-		public $usid, $fusid;
+		public $usid = null;
+		public $fusid = null;
 
 		public function save()
 		{

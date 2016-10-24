@@ -2,7 +2,9 @@
 
 	class Presentation extends Database
 	{
-		public $usid, $qid, $prdate;
+		public $usid = null;
+		public $qid = null;
+		public $prdate = null;
 
 		public function save()
 		{

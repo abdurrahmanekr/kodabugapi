@@ -130,4 +130,22 @@
 			$this->query .= " LIMIT $limit";
 			return $this;	
 		}
+
+		/**
+		 * Database'e Tablo Oluşturmaya yarar
+		 * @param string $name
+		 * @param array $value
+		*/
+		public function create($name, $value)
+		{
+			$this->query .= " CREATE TABLE IF NOT EXISTS `$name` (";
+			$i = 0;
+			foreach ($value as $key => $item) {
+				$this->query .= " `$key` $item";
+				if (++$i != count($value))
+					$this->query .= ", ";
+			}
+			$this->query .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+			return $this;
+		}
 	}

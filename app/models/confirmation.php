@@ -2,7 +2,8 @@
 
 	class Confirmation extends Database
 	{
-		public $qid, $conf;
+		public $qid = null;
+		public $conf = null;
 
 		public function save()
 		{

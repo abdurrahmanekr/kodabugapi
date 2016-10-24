@@ -2,7 +2,13 @@
 
 	class Point extends Database
 	{
-		public $usid, $copo, $hepo, $bugpo, $fipo, $keypo;
+		public $usid = null;
+		public $copo = null;
+		public $hepo = null;
+		public $bugpo = null;
+		public $fipo = null;
+		public $keypo = null;
+		public $last = null;
 
 		public function save()
 		{
@@ -13,14 +19,16 @@
 												hepo = ?,
 												bugpo = ?,
 												fipo = ?,
-												keypo = ?");
+												keypo = ?,
+												last = ?");
 			$insert = $query->execute(array(
 				$this->usid,
 				$this->copo,
 				$this->hepo,
 				$this->bugpo,
 				$this->fipo,
-				$this->keypo
+				$this->keypo,
+				$this->last
 			));
 			if ($insert)
 				return true;
@@ -36,7 +44,8 @@
 											hepo = ?,
 											bugpo = ?,
 											fipo = ?,
-											keypo = ?
+											keypo = ?,
+											last = ?
 									WHERE $where");
 			
 			$update = $query->execute($wValues);
