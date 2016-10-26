@@ -60,17 +60,26 @@
 
 		public function loginUser($data)
 		{
-			$userId = isset($data["usid"]) ? $data["usid"] : null;
+			$userId = isset($data["usname"]) ? $data["usname"] : null;
 			if (!$userId)
 				return null;
 
 			$user = new User();
 			$query = $user
 						->from()
-						->where("usid = '$userId'")
-						->select()
+						->join("username", array("usid" => "usid"))
+						->where("user.usid = :id", array("id" => "5cf88c46942e1ee7f3ceecd22457f705"))
+						->select(array(
+							"usid" => "user.usid"
+						))
 						->execute(true); // tek data olduğu için true
-			foreach ($query as $item)
-				return $item;
+			if (is_array($query))
+			{
+				$auth = $this->generateAuthKey();
+				return array("auth" => $auth);
+			}
+			else if ($query->rowCount() == 0)
+			{
+			}
 		}
 	}

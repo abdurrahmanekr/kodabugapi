@@ -67,8 +67,9 @@
 				))
 				->create("user", array(
 					"usid" => "VARCHAR(255) NOT NULL",
-					"name" => "VARCHAR (255)",
+					"usname" => "VARCHAR (255)",
 					"surname" => "VARCHAR (255)",
+					"usmail" => "VARCHAR(320)", // {64}@{255} '.url dahil'
 					"uspoint" => "INT NOT NULL",
 					"birth" => "VARCHAR (20)",
 					"auth" => "VARCHAR(255)"
@@ -86,6 +87,10 @@
 					"fipo" => "INT NOT NULL",
 					"keypo" => "INT NOT NULL",
 					"last" => "VARCHAR(20)"
+				))
+				->create("username", array(
+					"usid" => "VARCHAR(255) NOT NULL PRIMARY KEY",
+					"usname" => "VARCHAR(255) NOT NULL UNIQUE"
 				));
 		}
 
@@ -99,15 +104,18 @@
 		{
 			if ($type)
 			{
-				$result = $this->db->query($this->query, PDO::FETCH_ASSOC);
-
-				if ($result == null || !$result->rowCount())
+				if ($this->wValues == null)
+					$result = $this->db->query($this->query)->fetch(PDO::FETCH_ASSOC);
+				else
 				{
-					$result == null;
+					$result = $this->db->prepare($this->query);
+					$result->execute($this->wValues);
+					if ($result->rowCount() > 0)
+						return $result->fetch(PDO::FETCH_ASSOC);
 					return $result;
 				}
-				
-				return $result;
+				if ($result)
+					return $result;
 			}
 
 			$result = $this->db->query($this->query, PDO::FETCH_ASSOC);
@@ -121,11 +129,4 @@
 			return $result;
 
 		}
-
-		public function generateUserId()
-		{
-			$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-			return md5($characters.rand(0, strlen($characters) - 1) + microtime());
-		}
-
 	}

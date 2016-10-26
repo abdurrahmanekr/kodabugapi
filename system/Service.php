@@ -18,4 +18,16 @@
 				echo json_encode($result);
 			}
 		}
+
+		public function generateAuthKey()
+		{
+			$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			return md5(rand(0, strlen($characters) - 1) . uniqid());
+		}
+
+		public function generateUserId()
+		{
+			$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			return md5(rand(0, strlen($characters) - 1) . uniqid());
+		}
 	}

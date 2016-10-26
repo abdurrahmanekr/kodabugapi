@@ -4,6 +4,7 @@
 	{
 		public $query = "";
 		public $tableName;
+		public $wValues = null;
 
 		function __construct() {}
 
@@ -13,6 +14,7 @@
 		*/
 		public function from($table = null)
 		{
+			$this->query = "";
 			if (!isset($table))
 			{
 				$this->tableName = strtolower(get_class($this));
@@ -40,7 +42,7 @@
 			$i = 0;
 			foreach ($cols as $key => $value)
 			{
-				$select .= " $value AS '$key'";
+				$select .= " $value AS `$key`";
 				if (++$i != count($cols))
 					$select .= ", ";
 			}
@@ -76,8 +78,11 @@
 		 * Sorgunun Koşulu
 		 * @param string $where
 		*/
-		public function where($where)
+		public function where($where, $wValues = null)
 		{
+			if ($wValues != null)
+				$this->wValues = $wValues;
+			
 			if (!isset($where))
 			{
 				throw new Exception("\$where exists", 1);

@@ -28,13 +28,13 @@
 				if (!isset($table[$item["TABLE_NAME"]])) {
 					$table[$item["TABLE_NAME"]] = array();
 					$table[$item["TABLE_NAME"]][] = $item["COLUMN_NAME"];
-				}else if(isset($table[$item["TABLE_NAME"]])){
+				} else if(isset($table[$item["TABLE_NAME"]]))
 					$table[$item["TABLE_NAME"]][] = $item["COLUMN_NAME"];
-				}
+				
 			/* veri tabanında tablo olmasına dikkat ediyoruz */
 			if (count($table) < 1) {
 				$result[] = "Veri tabanında tablo yok. Kontrol edin !";
-			}else{
+			} else {
 				$result[] = "Güzel... veri tabanında ".count($table)." tablo var.";
 				$this->addClasses($result, $table);
 			}
@@ -72,12 +72,11 @@
 			\$query = \$this->db->prepare(\"INSERT INTO  $key SET 
 												";
 		for ($i = 0; $i < count($item); $i++)
-			if ($i == count($item) -1) {
+			if ($i == count($item) -1)
 				$cls .= $item[$i]." = ?";
-			}else{
+			else
 				$cls .= $item[$i]." = ?,
 												";
-			}
 		$cls .= "\");";
 		$cls .= "
 			\$insert = \$query->execute(array(
@@ -151,7 +150,9 @@
 
 		private function writeFile($fileName, $write)
 		{
-			unlink($fileName);
+			if (file_exists($fileName)) {
+				unlink($fileName);
+			}
 			$file = fopen($fileName,"a+");
 			fwrite($file, $write);
 			fclose($file);

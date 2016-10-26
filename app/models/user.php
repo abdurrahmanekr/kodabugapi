@@ -3,8 +3,9 @@
 	class User extends Database
 	{
 		public $usid = null;
-		public $name = null;
+		public $usname = null;
 		public $surname = null;
+		public $usmail = null;
 		public $uspoint = null;
 		public $birth = null;
 		public $auth = null;
@@ -14,15 +15,17 @@
 
 			$query = $this->db->prepare("INSERT INTO  user SET 
 												usid = ?,
-												name = ?,
+												usname = ?,
 												surname = ?,
+												usmail = ?,
 												uspoint = ?,
 												birth = ?,
 												auth = ?");
 			$insert = $query->execute(array(
 				$this->usid,
-				$this->name,
+				$this->usname,
 				$this->surname,
+				$this->usmail,
 				$this->uspoint,
 				$this->birth,
 				$this->auth
@@ -37,8 +40,9 @@
 
 			$query = $this->db->prepare(" UPDATE  user SET 
 											usid = ?,
-											name = ?,
+											usname = ?,
 											surname = ?,
+											usmail = ?,
 											uspoint = ?,
 											birth = ?,
 											auth = ?

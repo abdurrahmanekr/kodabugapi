@@ -28,16 +28,21 @@
 				$this->response(null);
 		}
 
-		public function register($data)
+		private function register($data)
 		{
 			$userId = $this->generateUserId();
+			// use session
+			$authKey = $this->generateAuthKey();
+		
 			// user tablosu
 			$user = new User();
 			$user->usid = $userId;
 			$user->name = $data["name"];
 			$user->surname = $data["surname"];
+			$user->usmail = $data["usmail"];
 			$user->uspoint = 0; 
 			$user->birth = $data["birth"];
+			$user->auth = $authKey;
 
 			// kullanıcı puanı
 			$point = new Point();
@@ -51,6 +56,16 @@
 
 			if ($point->save())
 				if ($user->save())
-					return array("result" => array("usid" => $userId, "auth" => ""));
+					return array("result" => array("usid" => $userId, "auth" => $authKey));
+		}
+
+		private function updateProfile($data)
+		{
+			# code...
+		}
+
+		private function uploadGame($data)
+		{
+			# code...
 		}
 	}
