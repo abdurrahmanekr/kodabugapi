@@ -42,7 +42,11 @@
 			$i = 0;
 			foreach ($cols as $key => $value)
 			{
-				$select .= " $value AS `$key`";
+				if (is_numeric($key))
+					$select .= " $value";
+				else
+					$select .= " $value AS `$key`";
+				
 				if (++$i != count($cols))
 					$select .= ", ";
 			}

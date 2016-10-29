@@ -99,20 +99,17 @@
 
 		$cls .= "
 
-		public function update(\$where, \$wValues)
+		public function update(\$fields, \$where, \$wValues)
 		{
-
-			\$query = \$this->db->prepare(\" UPDATE  $key SET 
-											";
-		for ($i = 0; $i < count($item); $i++)
-			if ($i == count($item) -1) {
-				$cls .= $item[$i]." = ?";
-			}else{
-				$cls .= $item[$i]." = ?,
-											";
+			\$qtext = \"UPDATE  $key SET\";
+			for (\$i=0; \$i < count(\$fields); \$i++) { 
+				\$qtext .= \" \" . \$fields[\$i] . \"= :\$fields[\$i] \";
+				if (\$i != count(\$fields) - 1)
+					\$qtext .= \",\";
 			}
-		$cls .= "
-									WHERE \$where\");
+
+			\$qtext .= \" WHERE \$where\";
+			\$query = \$this->db->prepare(\$qtext);
 			";
 		$cls .= "
 			\$update = \$query->execute(\$wValues);
@@ -167,4 +164,4 @@
 			$str = strtolower(substr($str,0,1)).substr($str,1);
 			return $str;
 		}
-	}
+	} 	

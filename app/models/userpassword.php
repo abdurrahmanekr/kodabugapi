@@ -1,34 +1,19 @@
 <?php 
 
-	class Question extends Database
+	class Userpassword extends Database
 	{
-		public $qid = null;
-		public $qusid = null;
-		public $qname = null;
-		public $qtype = null;
-		public $qoption = null;
-		public $qtrue = null;
-		public $qfrequency = null;
+		public $usid = null;
+		public $password = null;
 
 		public function save()
 		{
 
-			$query = $this->db->prepare("INSERT INTO  question SET 
-												qid = ?,
-												qusid = ?,
-												qname = ?,
-												qtype = ?,
-												qoption = ?,
-												qtrue = ?,
-												qfrequency = ?");
+			$query = $this->db->prepare("INSERT INTO  userpassword SET 
+												usid = ?,
+												password = ?");
 			$insert = $query->execute(array(
-				$this->qid,
-				$this->qusid,
-				$this->qname,
-				$this->qtype,
-				$this->qoption,
-				$this->qtrue,
-				$this->qfrequency
+				$this->usid,
+				$this->password
 			));
 			if ($insert)
 				return true;
@@ -37,7 +22,7 @@
 
 		public function update($fields, $where, $wValues)
 		{
-			$qtext = "UPDATE  question SET";
+			$qtext = "UPDATE  userpassword SET";
 			for ($i=0; $i < count($fields); $i++) { 
 				$qtext .= " " . $fields[$i] . "= :$fields[$i] ";
 				if ($i != count($fields) - 1)
@@ -56,7 +41,7 @@
 		public function delete($where, $wValues)
 		{
 
-			$query = $this->db->prepare(" DELETE  FROM question 
+			$query = $this->db->prepare(" DELETE  FROM userpassword 
 									WHERE $where");
 
 			$delete = $query->execute($wValues);

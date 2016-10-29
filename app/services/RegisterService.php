@@ -20,7 +20,8 @@
 				// serviste kullanılacak tablolar çekiliyor
 				$this->getTable("User");
 				$this->getTable("Point");
-				
+				$this->getTable("Userpassword");
+
 				// varsa çağır çıktısını işleme koy
 				$this->response($this->$method($this->parameters));
 			}
@@ -30,19 +31,37 @@
 
 		private function register($data)
 		{
-			$userId = $this->generateUserId();
-			// use session
-			$authKey = $this->generateAuthKey();
-		
 			// user tablosu
 			$user = new User();
-			$user->usid = $userId;
-			$user->name = $data["name"];
+			$user->usname = $data["usname"];
 			$user->surname = $data["surname"];
 			$user->usmail = $data["usmail"];
 			$user->uspoint = 0; 
 			$user->birth = $data["birth"];
+			$query = $user
+						->from()
+						->join("username", array("usid" => "usid"))
+						->where("user.usmail = :mail", array(
+							"mail" => $data["usmail"]
+						))
+						->select(array(
+							"usid" => "user.usid"
+						))
+						->execute(true); // tek data olduğu için true
+			
+			if (is_array($query))
+				return array("exist" => 1);
+			
+			$userId = $this->generateUserId();
+			// use session
+			$authKey = $this->generateAuthKey();
+			$user->usid = $userId;
 			$user->auth = $authKey;
+			
+			$pass = new Userpassword();
+			$pass->usid = $userId;
+
+			$pass->password = md5(md5($userId . "mustafa sandal ama kürekte yok") . $userId . "ne var ne yok dopin yoksa sana madalya yok" . $data["password"] . md5("kormada var gül diye sevdiğim dikende var"));
 
 			// kullanıcı puanı
 			$point = new Point();
@@ -56,7 +75,8 @@
 
 			if ($point->save())
 				if ($user->save())
-					return array("result" => array("usid" => $userId, "auth" => $authKey));
+					if ($pass->save())
+						return array("result" => array("usid" => $userId, "auth" => $authKey));
 		}
 
 		private function updateProfile($data)

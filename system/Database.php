@@ -91,6 +91,10 @@
 				->create("username", array(
 					"usid" => "VARCHAR(255) NOT NULL PRIMARY KEY",
 					"usname" => "VARCHAR(255) NOT NULL UNIQUE"
+				))
+				->create("userpassword", array(
+					"usid" => "VARCHAR(255) NOT NULL PRIMARY KEY",
+					"password" => "VARCHAR(255) NOT NULL"
 				));
 		}
 

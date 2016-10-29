@@ -23,14 +23,17 @@
 			return false;
 		}
 
-		public function update($where, $wValues)
+		public function update($fields, $where, $wValues)
 		{
+			$qtext = "UPDATE  presentation SET";
+			for ($i=0; $i < count($fields); $i++) { 
+				$qtext .= " " . $fields[$i] . "= :$fields[$i] ";
+				if ($i != count($fields) - 1)
+					$qtext .= ",";
+			}
 
-			$query = $this->db->prepare(" UPDATE  presentation SET 
-											usid = ?,
-											qid = ?,
-											prdate = ?
-									WHERE $where");
+			$qtext .= " WHERE $where";
+			$query = $this->db->prepare($qtext);
 			
 			$update = $query->execute($wValues);
 			if ($update)

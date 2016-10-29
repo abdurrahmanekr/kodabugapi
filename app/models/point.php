@@ -35,18 +35,17 @@
 			return false;
 		}
 
-		public function update($where, $wValues)
+		public function update($fields, $where, $wValues)
 		{
+			$qtext = "UPDATE  point SET";
+			for ($i=0; $i < count($fields); $i++) { 
+				$qtext .= " " . $fields[$i] . "= :$fields[$i] ";
+				if ($i != count($fields) - 1)
+					$qtext .= ",";
+			}
 
-			$query = $this->db->prepare(" UPDATE  point SET 
-											usid = ?,
-											copo = ?,
-											hepo = ?,
-											bugpo = ?,
-											fipo = ?,
-											keypo = ?,
-											last = ?
-									WHERE $where");
+			$qtext .= " WHERE $where";
+			$query = $this->db->prepare($qtext);
 			
 			$update = $query->execute($wValues);
 			if ($update)

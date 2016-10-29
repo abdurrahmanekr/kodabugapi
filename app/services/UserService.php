@@ -19,6 +19,7 @@
 			{
 				// serviste kullanılacak tablolar çekiliyor
 				$this->getTable("User");
+				$this->getTable("Userpassword");
 				
 				// varsa çağır çıktısını işleme koy
 				$this->response($this->$method($this->parameters));
@@ -63,23 +64,57 @@
 			$userId = isset($data["usname"]) ? $data["usname"] : null;
 			if (!$userId)
 				return null;
-
+			$password = $data["password"];
 			$user = new User();
 			$query = $user
 						->from()
 						->join("username", array("usid" => "usid"))
-						->where("user.usid = :id", array("id" => "5cf88c46942e1ee7f3ceecd22457f705"))
+						->where("user.usid = :id OR user.usmail = :id OR username.usname = :id", array(
+							"id" => $userId
+						))
 						->select(array(
 							"usid" => "user.usid"
 						))
 						->execute(true); // tek data olduğu için true
+			
 			if (is_array($query))
 			{
-				$auth = $this->generateAuthKey();
-				return array("auth" => $auth);
+				$userId = $query["usid"];
+				$userpassword = new Userpassword();
+				$query = $userpassword
+							->from()
+							->where("userpassword.usid = :id && userpassword.password = :pass", array(
+								"id" => $userId,
+								"pass" => md5(md5($userId . "mustafa sandal ama kürekte yok") . $userId . "ne var ne yok dopin yoksa sana madalya yok" . $password . md5("kormada var gül diye sevdiğim dikende var"))
+							))
+							->select(array(
+								"usid" => "usid"
+							))
+							->execute(true);
+				if (is_array($query))
+				{
+					// kullanıcı authkey yeniliyor
+					$auth = $this->generateAuthKey();
+					$user->update(array("auth"), "usid = :usid", array(
+						"auth" => $auth,
+						"usid" => $userId
+					));
+					return array(
+						"username" => 1,
+						"password" => 1,
+						"auth" => $auth
+					);
+				}
+				else if ($query->rowCount() == 0) 
+					return array(
+						"username" => 1,
+						"password" => -1
+					);
 			}
 			else if ($query->rowCount() == 0)
-			{
-			}
+				return array(
+					"username" => -1,
+					"password" => -1
+				);
 		}
 	}
