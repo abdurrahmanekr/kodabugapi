@@ -95,8 +95,8 @@
 				{
 					// kullanıcı authkey yeniliyor
 					$auth = $this->generateAuthKey();
-					$user->update(array("auth"), "usid = :usid", array(
-						"auth" => $auth,
+					$user->auth = $auth;
+					$user->update("usid = :usid", array(
 						"usid" => $userId
 					));
 					return array(

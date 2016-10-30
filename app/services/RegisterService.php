@@ -21,6 +21,8 @@
 				$this->getTable("User");
 				$this->getTable("Point");
 				$this->getTable("Userpassword");
+				$this->getTable("Log");
+				$this->getTable("File");
 
 				// varsa çağır çıktısını işleme koy
 				$this->response($this->$method($this->parameters));
@@ -31,6 +33,14 @@
 
 		private function register($data)
 		{
+			if (!isset($data["usname"]) ||
+				!isset($data["surname"]) || 
+				!isset($data["usmail"]) ||
+				!isset($data["password"]))
+			{
+				$this->saveLog($data, "", "", "R");
+				return false;
+			}
 			// user tablosu
 			$user = new User();
 			$user->usname = $data["usname"];
@@ -49,8 +59,10 @@
 						))
 						->execute(true); // tek data olduğu için true
 			
-			if (is_array($query))
+			if (is_array($query)) {
+				$this->saveLog($data, "", "", "R");
 				return array("exist" => 1);
+			}
 			
 			$userId = $this->generateUserId();
 			// use session
@@ -74,14 +86,117 @@
 			$point->last = 0;
 
 			if ($point->save())
+			{
 				if ($user->save())
+				{
 					if ($pass->save())
-						return array("result" => array("usid" => $userId, "auth" => $authKey));
+					{
+						return array("exist" => 0, "auth" => $authKey);
+					}
+					else
+					{
+						$this->saveLog($data, $userId, $authKey, "E");
+						return false;
+					}
+				}
+				else
+				{
+					$this->saveLog($data, $userId, $authKey, "E");
+					return false;					
+				}
+			}
+			else
+			{
+				$this->saveLog($data, $userId, $authKey, "E");
+				return false;				
+			}
 		}
 
 		private function updateProfile($data)
 		{
-			# code...
+			if (!isset($data["auth"]))
+			{
+				$this->saveLog($data);
+				return false;
+			}
+
+			$user = new User();
+			$user = $user
+						->from()
+						->where("user.auth = :auth", array(
+							"auth" => $data["auth"]
+						))
+						->select(array(
+							"usid" => "usid"
+						))
+						->execute(true);
+			if (!is_array($user))
+			{
+				$this->saveLog($data);
+				return false;
+			}
+
+			
+			$req = new Request();
+			$fData = $req->files["file"];
+			// file upload var mı ?
+			if (count($fData) > 0)
+			{
+				$fileId = $this->generateAuthKey();
+				
+				$filePath = _FILE_DIR_ . $fileId . ".". pathinfo($fData["name"])["extension"];
+				if (move_uploaded_file($fData["tmp_name"], $filePath))
+				{
+					$file = new File();
+					$file->fid = $fileId;
+					$file->usid = $user["usid"];
+					$file->fname = $fData["name"];
+					$file->ftype = pathinfo($fData["name"])["extension"];
+					$file->ffunction = "P";
+					$file->fpath = $filePath;
+					if ($file->save())
+					{
+						$this->saveLog($data, $user["usid"], $data["auth"], "S");
+						return array("result" => 1);
+					}
+					else
+					{
+						$this->saveLog($data, $user["usid"], $data["auth"], "E");
+						return false;
+					}
+				}
+				else
+				{
+					$this->saveLog($data, $user["usid"], $data["auth"], "E");
+					return false;
+				}
+			}
+
+			if (isset($data["usname"]) ||
+				isset($data["surname"]) || 
+				isset($data["usmail"]) ||
+				isset($data["password"]))
+			{
+				$upgradeUser = new User();
+				$upgradeUser->usname = isset($data["usname"]) ? $data["usname"] : null;
+				$upgradeUser->surname = isset($data["surname"]) ? $data["surname"] : null;
+				$upgradeUser->usmail = isset($data["usmail"]) ? $data["usmail"] : null;
+				$upgradeUser->password = isset($data["password"]) ? 
+					md5(md5($user["usid"] . "mustafa sandal ama kürekte yok") . $user["usid"] . "ne var ne yok dopin yoksa sana madalya yok" . $data["password"] . md5("kormada var gül diye sevdiğim dikende var")) 
+				: null;
+				if ($upgradeUser->update("usid = :userid", ["userid" => $user["usid"]]))
+				{
+					$this->saveLog($data, $user["usid"], $data["auth"], "S");
+					return array("result" => 1);
+				}
+				else
+				{
+					$this->saveLog($data, $user["usid"], $data["auth"], "E");
+					return false;
+				}
+			}
+			
+
 		}
 
 		private function uploadGame($data)

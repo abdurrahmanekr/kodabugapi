@@ -19,7 +19,7 @@
 					if ($value)
 						$this->db->exec($value);
 
-				new KosUp();
+				// new KosUp();
 			}
 			catch ( PDOException $e )
 			{
@@ -66,7 +66,7 @@
 					"tpname" => "VARCHAR (255)"
 				))
 				->create("user", array(
-					"usid" => "VARCHAR(255) NOT NULL",
+					"usid" => "VARCHAR(255) NOT NULL PRIMARY KEY",
 					"usname" => "VARCHAR (255)",
 					"surname" => "VARCHAR (255)",
 					"usmail" => "VARCHAR(320)", // {64}@{255} '.url dahil'
@@ -80,7 +80,7 @@
 					"windate" =>  "VARCHAR(20)"
 				))
 				->create("point", array(
-					"usid" => "VARCHAR(255) NOT NULL",
+					"usid" => "VARCHAR(255) NOT NULL PRIMARY KEY",
 					"copo" => "INT NOT NULL",
 					"hepo" => "INT NOT NULL",
 					"bugpo" => "INT NOT NULL",
@@ -95,6 +95,22 @@
 				->create("userpassword", array(
 					"usid" => "VARCHAR(255) NOT NULL PRIMARY KEY",
 					"password" => "VARCHAR(255) NOT NULL"
+				))
+				->create("log", array(
+					"lgid" => "INT NOT NULL PRIMARY KEY AUTO_INCREMENT",
+					"lgdate" => "VARCHAR(20) NOT NULL",
+					"usid" => "VARCHAR(255)",
+					"auth" => "VARCHAR(255)",
+					"type" => "ENUM('E', 'S', 'R', 'A')", // E->error, S->success, R-> Request, A-> Anonymouss
+					"result" => "TEXT"
+				))
+				->create("file", array(
+					"fid" => "VARCHAR(255) NOT NULL PRIMARY KEY",
+					"usid" => "VARCHAR(255) NOT NULL",
+					"fname" => "VARCHAR(255) NOT NULL",
+					"ftype" => "VARCHAR(20)",
+					"ffunction" => "ENUM('P', 'G', 'S', '') NOT NULL", // P -> profile, G -> game, S -> system, 
+					"fpath" => "TEXT"
 				));
 		}
 

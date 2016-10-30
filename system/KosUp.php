@@ -99,15 +99,27 @@
 
 		$cls .= "
 
-		public function update(\$fields, \$where, \$wValues)
+		public function update(\$where, \$wValues)
 		{
+			if(!isset(\$where) || !isset(\$wValues))
+				return false;
 			\$qtext = \"UPDATE  $key SET\";
-			for (\$i=0; \$i < count(\$fields); \$i++) { 
-				\$qtext .= \" \" . \$fields[\$i] . \"= :\$fields[\$i] \";
-				if (\$i != count(\$fields) - 1)
+			\$fields = array();
+			";
+		for ($i=0; $i < count($item); $i++) { 
+			$cls .= "
+			if (\$this->".$this->camelCase($item[$i])." != null)
+				\$fields[\"". $this->camelCase($item[$i]) ."\"] = \$this->".$this->camelCase($item[$i]) .";";
+		}
+			$cls .= "
+			\$i = 0;
+			foreach (\$fields as \$key => \$value)
+			{ 
+				\$qtext .= \" \$key = :\$key \";
+				if (\$i++ != count(\$fields) - 1)
 					\$qtext .= \",\";
 			}
-
+			\$wValues = array_merge(\$fields, \$wValues);
 			\$qtext .= \" WHERE \$where\";
 			\$query = \$this->db->prepare(\$qtext);
 			";

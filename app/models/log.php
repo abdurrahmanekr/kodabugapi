@@ -1,34 +1,31 @@
 <?php 
 
-	class User extends Database
+	class Log extends Database
 	{
+		public $lgid = null;
+		public $lgdate = null;
 		public $usid = null;
-		public $usname = null;
-		public $surname = null;
-		public $usmail = null;
-		public $uspoint = null;
-		public $birth = null;
 		public $auth = null;
+		public $type = null;
+		public $result = null;
 
 		public function save()
 		{
 
-			$query = $this->db->prepare("INSERT INTO  user SET 
+			$query = $this->db->prepare("INSERT INTO  log SET 
+												lgid = ?,
+												lgdate = ?,
 												usid = ?,
-												usname = ?,
-												surname = ?,
-												usmail = ?,
-												uspoint = ?,
-												birth = ?,
-												auth = ?");
+												auth = ?,
+												type = ?,
+												result = ?");
 			$insert = $query->execute(array(
+				$this->lgid,
+				$this->lgdate,
 				$this->usid,
-				$this->usname,
-				$this->surname,
-				$this->usmail,
-				$this->uspoint,
-				$this->birth,
-				$this->auth
+				$this->auth,
+				$this->type,
+				$this->result
 			));
 			if ($insert)
 				return true;
@@ -39,23 +36,21 @@
 		{
 			if(!isset($where) || !isset($wValues))
 				return false;
-			$qtext = "UPDATE  user SET";
+			$qtext = "UPDATE  log SET";
 			$fields = array();
 			
+			if ($this->lgid != null)
+				$fields["lgid"] = $this->lgid;
+			if ($this->lgdate != null)
+				$fields["lgdate"] = $this->lgdate;
 			if ($this->usid != null)
 				$fields["usid"] = $this->usid;
-			if ($this->usname != null)
-				$fields["usname"] = $this->usname;
-			if ($this->surname != null)
-				$fields["surname"] = $this->surname;
-			if ($this->usmail != null)
-				$fields["usmail"] = $this->usmail;
-			if ($this->uspoint != null)
-				$fields["uspoint"] = $this->uspoint;
-			if ($this->birth != null)
-				$fields["birth"] = $this->birth;
 			if ($this->auth != null)
 				$fields["auth"] = $this->auth;
+			if ($this->type != null)
+				$fields["type"] = $this->type;
+			if ($this->result != null)
+				$fields["result"] = $this->result;
 			$i = 0;
 			foreach ($fields as $key => $value)
 			{ 
@@ -76,7 +71,7 @@
 		public function delete($where, $wValues)
 		{
 
-			$query = $this->db->prepare(" DELETE  FROM user 
+			$query = $this->db->prepare(" DELETE  FROM log 
 									WHERE $where");
 
 			$delete = $query->execute($wValues);

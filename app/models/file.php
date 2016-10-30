@@ -1,19 +1,31 @@
 <?php 
 
-	class Follow extends Database
+	class File extends Database
 	{
+		public $fid = null;
 		public $usid = null;
-		public $fusid = null;
+		public $fname = null;
+		public $ftype = null;
+		public $ffunction = null;
+		public $fpath = null;
 
 		public function save()
 		{
 
-			$query = $this->db->prepare("INSERT INTO  follow SET 
+			$query = $this->db->prepare("INSERT INTO  file SET 
+												fid = ?,
 												usid = ?,
-												fusid = ?");
+												fname = ?,
+												ftype = ?,
+												ffunction = ?,
+												fpath = ?");
 			$insert = $query->execute(array(
+				$this->fid,
 				$this->usid,
-				$this->fusid
+				$this->fname,
+				$this->ftype,
+				$this->ffunction,
+				$this->fpath
 			));
 			if ($insert)
 				return true;
@@ -24,13 +36,21 @@
 		{
 			if(!isset($where) || !isset($wValues))
 				return false;
-			$qtext = "UPDATE  follow SET";
+			$qtext = "UPDATE  file SET";
 			$fields = array();
 			
+			if ($this->fid != null)
+				$fields["fid"] = $this->fid;
 			if ($this->usid != null)
 				$fields["usid"] = $this->usid;
-			if ($this->fusid != null)
-				$fields["fusid"] = $this->fusid;
+			if ($this->fname != null)
+				$fields["fname"] = $this->fname;
+			if ($this->ftype != null)
+				$fields["ftype"] = $this->ftype;
+			if ($this->ffunction != null)
+				$fields["ffunction"] = $this->ffunction;
+			if ($this->fpath != null)
+				$fields["fpath"] = $this->fpath;
 			$i = 0;
 			foreach ($fields as $key => $value)
 			{ 
@@ -51,7 +71,7 @@
 		public function delete($where, $wValues)
 		{
 
-			$query = $this->db->prepare(" DELETE  FROM follow 
+			$query = $this->db->prepare(" DELETE  FROM file 
 									WHERE $where");
 
 			$delete = $query->execute($wValues);

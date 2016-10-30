@@ -35,15 +35,35 @@
 			return false;
 		}
 
-		public function update($fields, $where, $wValues)
+		public function update($where, $wValues)
 		{
+			if(!isset($where) || !isset($wValues))
+				return false;
 			$qtext = "UPDATE  question SET";
-			for ($i=0; $i < count($fields); $i++) { 
-				$qtext .= " " . $fields[$i] . "= :$fields[$i] ";
-				if ($i != count($fields) - 1)
+			$fields = array();
+			
+			if ($this->qid != null)
+				$fields["qid"] = $this->qid;
+			if ($this->qusid != null)
+				$fields["qusid"] = $this->qusid;
+			if ($this->qname != null)
+				$fields["qname"] = $this->qname;
+			if ($this->qtype != null)
+				$fields["qtype"] = $this->qtype;
+			if ($this->qoption != null)
+				$fields["qoption"] = $this->qoption;
+			if ($this->qtrue != null)
+				$fields["qtrue"] = $this->qtrue;
+			if ($this->qfrequency != null)
+				$fields["qfrequency"] = $this->qfrequency;
+			$i = 0;
+			foreach ($fields as $key => $value)
+			{ 
+				$qtext .= " $key = :$key ";
+				if ($i++ != count($fields) - 1)
 					$qtext .= ",";
 			}
-
+			$wValues = array_merge($fields, $wValues);
 			$qtext .= " WHERE $where";
 			$query = $this->db->prepare($qtext);
 			

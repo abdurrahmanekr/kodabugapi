@@ -19,8 +19,9 @@
 		exit(0);
 	}
 
-
-	define("_SITE_URL_", "http://localhost/name");
+	date_default_timezone_set("Europe/Istanbul");
+	define("_SITE_URL_", "http://localhost/kodabug");
+	define("_FILE_DIR_", __DIR__ . "/uploads/");
 	define("_HOST_NAME_", "localhost");
 	define("_DB_NAME_", "kodabug");
 	define("_DB_USER_", "root");

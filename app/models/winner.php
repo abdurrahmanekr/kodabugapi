@@ -23,15 +23,27 @@
 			return false;
 		}
 
-		public function update($fields, $where, $wValues)
+		public function update($where, $wValues)
 		{
+			if(!isset($where) || !isset($wValues))
+				return false;
 			$qtext = "UPDATE  winner SET";
-			for ($i=0; $i < count($fields); $i++) { 
-				$qtext .= " " . $fields[$i] . "= :$fields[$i] ";
-				if ($i != count($fields) - 1)
+			$fields = array();
+			
+			if ($this->gid != null)
+				$fields["gid"] = $this->gid;
+			if ($this->usid != null)
+				$fields["usid"] = $this->usid;
+			if ($this->windate != null)
+				$fields["windate"] = $this->windate;
+			$i = 0;
+			foreach ($fields as $key => $value)
+			{ 
+				$qtext .= " $key = :$key ";
+				if ($i++ != count($fields) - 1)
 					$qtext .= ",";
 			}
-
+			$wValues = array_merge($fields, $wValues);
 			$qtext .= " WHERE $where";
 			$query = $this->db->prepare($qtext);
 			

@@ -32,15 +32,33 @@
 			return false;
 		}
 
-		public function update($fields, $where, $wValues)
+		public function update($where, $wValues)
 		{
+			if(!isset($where) || !isset($wValues))
+				return false;
 			$qtext = "UPDATE  game SET";
-			for ($i=0; $i < count($fields); $i++) { 
-				$qtext .= " " . $fields[$i] . "= :$fields[$i] ";
-				if ($i != count($fields) - 1)
+			$fields = array();
+			
+			if ($this->gid != null)
+				$fields["gid"] = $this->gid;
+			if ($this->gusid != null)
+				$fields["gusid"] = $this->gusid;
+			if ($this->grivalid != null)
+				$fields["grivalid"] = $this->grivalid;
+			if ($this->uspoint != null)
+				$fields["uspoint"] = $this->uspoint;
+			if ($this->rivalpoint != null)
+				$fields["rivalpoint"] = $this->rivalpoint;
+			if ($this->gmaxpoint != null)
+				$fields["gmaxpoint"] = $this->gmaxpoint;
+			$i = 0;
+			foreach ($fields as $key => $value)
+			{ 
+				$qtext .= " $key = :$key ";
+				if ($i++ != count($fields) - 1)
 					$qtext .= ",";
 			}
-
+			$wValues = array_merge($fields, $wValues);
 			$qtext .= " WHERE $where";
 			$query = $this->db->prepare($qtext);
 			

@@ -35,15 +35,35 @@
 			return false;
 		}
 
-		public function update($fields, $where, $wValues)
+		public function update($where, $wValues)
 		{
+			if(!isset($where) || !isset($wValues))
+				return false;
 			$qtext = "UPDATE  point SET";
-			for ($i=0; $i < count($fields); $i++) { 
-				$qtext .= " " . $fields[$i] . "= :$fields[$i] ";
-				if ($i != count($fields) - 1)
+			$fields = array();
+			
+			if ($this->usid != null)
+				$fields["usid"] = $this->usid;
+			if ($this->copo != null)
+				$fields["copo"] = $this->copo;
+			if ($this->hepo != null)
+				$fields["hepo"] = $this->hepo;
+			if ($this->bugpo != null)
+				$fields["bugpo"] = $this->bugpo;
+			if ($this->fipo != null)
+				$fields["fipo"] = $this->fipo;
+			if ($this->keypo != null)
+				$fields["keypo"] = $this->keypo;
+			if ($this->last != null)
+				$fields["last"] = $this->last;
+			$i = 0;
+			foreach ($fields as $key => $value)
+			{ 
+				$qtext .= " $key = :$key ";
+				if ($i++ != count($fields) - 1)
 					$qtext .= ",";
 			}
-
+			$wValues = array_merge($fields, $wValues);
 			$qtext .= " WHERE $where";
 			$query = $this->db->prepare($qtext);
 			

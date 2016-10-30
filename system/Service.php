@@ -30,4 +30,16 @@
 			$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 			return md5(rand(0, strlen($characters) - 1) . uniqid());
 		}
+
+		public function saveLog($data, $usid =  '', $auth = '', $type = 'A')
+		{
+			$log = new Log();
+			$log->lgdate = date("YmdHis");
+			$log->usid = $usid;
+			$log->auth = $auth;
+			$log->type = $type;
+			$log->result = json_encode($data);
+			$log->save();
+			return false;
+		}
 	}
