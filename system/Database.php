@@ -9,7 +9,7 @@
 			try
 			{
 				// debug modunda çalışılması tavsiye edilir, canlıya geçildiğinde performans kaybına neden olur
-				$this->db = new PDO("mysql:host=". _HOST_NAME_ .";", _DB_USER_, _DB_PASSWORD_);
+				$this->db = new PDO("mysql:host=". _HOST_NAME_ .";charset=utf8", _DB_USER_, _DB_PASSWORD_);
 				$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->db->query("CREATE DATABASE IF NOT EXISTS ". _DB_NAME_);
 				$this->db->query("use ". _DB_NAME_);
@@ -53,12 +53,12 @@
 					"prdate" =>  "VARCHAR (20)"
 				))
 				->create("question", array(
-					"qid" => "INT NOT NULL",
-					"qusid" => "INT NOT NULL",
+					"qid" => "VARCHAR(255) NOT NULL PRIMARY KEY",
+					"qusid" => "VARCHAR(255) NOT NULL",
 					"qname" => "VARCHAR (255) NOT NULL",
 					"qtype" => "INT NOT NULL",
 					"qoption" => "TEXT NOT NULL",
-					"qtrue" => "VARCHAR (2) NOT NULL",
+					"qtrue" => "INT NOT NULL",
 					"qfrequency" => "INT NOT NULL"
 				))
 				->create("type", array(
@@ -111,6 +111,10 @@
 					"ftype" => "VARCHAR(20)",
 					"ffunction" => "ENUM('P', 'G', 'S', '') NOT NULL", // P -> profile, G -> game, S -> system, 
 					"fpath" => "TEXT"
+				))
+				->create("questionfile", array(
+					"qid" => "VARCHAR(255) NOT NULL PRIMARY KEY",
+					"fid" => "VARCHAR(255) NOT NULL"
 				));
 		}
 

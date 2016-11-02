@@ -5,7 +5,7 @@
 	 * date: 12.10.2016
 	 * time: 21:21 - 09:21 PM
 	 */
-
+	session_start();
 	ob_start();
 
 	// Servisin ayarlarının bulunduğu dosyayı include ediyor

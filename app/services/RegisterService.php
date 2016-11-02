@@ -23,6 +23,8 @@
 				$this->getTable("Userpassword");
 				$this->getTable("Log");
 				$this->getTable("File");
+				$this->getTable("Question");
+				$this->getTable("Questionfile");
 
 				// varsa çağır çıktısını işleme koy
 				$this->response($this->$method($this->parameters));
@@ -59,7 +61,8 @@
 						))
 						->execute(true); // tek data olduğu için true
 			
-			if (is_array($query)) {
+			if (is_array($query))
+			{
 				$this->saveLog($data, "", "", "R");
 				return array("exist" => 1);
 			}
@@ -123,12 +126,12 @@
 			$user = new User();
 			$user = $user
 						->from()
-						->where("user.auth = :auth", array(
+						->where("user.auth = :auth", [
 							"auth" => $data["auth"]
-						))
-						->select(array(
+						])
+						->select([
 							"usid" => "usid"
-						))
+						])
 						->execute(true);
 			if (!is_array($user))
 			{
@@ -175,19 +178,17 @@
 			if (isset($data["usname"]) ||
 				isset($data["surname"]) || 
 				isset($data["usmail"]) ||
-				isset($data["password"]))
+				isset($data["birth"]))
 			{
 				$upgradeUser = new User();
 				$upgradeUser->usname = isset($data["usname"]) ? $data["usname"] : null;
 				$upgradeUser->surname = isset($data["surname"]) ? $data["surname"] : null;
 				$upgradeUser->usmail = isset($data["usmail"]) ? $data["usmail"] : null;
-				$upgradeUser->password = isset($data["password"]) ? 
-					md5(md5($user["usid"] . "mustafa sandal ama kürekte yok") . $user["usid"] . "ne var ne yok dopin yoksa sana madalya yok" . $data["password"] . md5("kormada var gül diye sevdiğim dikende var")) 
-				: null;
+				$upgradeUser->birth = isset($data["birth"]) ? $data["birth"] : null;
+
 				if ($upgradeUser->update("usid = :userid", ["userid" => $user["usid"]]))
 				{
 					$this->saveLog($data, $user["usid"], $data["auth"], "S");
-					return array("result" => 1);
 				}
 				else
 				{
@@ -195,12 +196,117 @@
 					return false;
 				}
 			}
-			
 
+			if (isset($data["password"]))
+			{
+				$password = new Userpassword();
+				$password->password = md5(md5($user["usid"] . "mustafa sandal ama kürekte yok") . $user["usid"] . "ne var ne yok dopin yoksa sana madalya yok" . $data["password"] . md5("kormada var gül diye sevdiğim dikende var"));
+				if ($password->update("usid = :userid", ["userid" => $user["usid"]]))
+				{
+					$this->saveLog($data, $user["usid"], $data["auth"], "S");
+				}
+				else
+				{
+					$this->saveLog($data, $user["usid"], $data["auth"], "E");
+					return false;
+				}
+				
+			}
+
+			return array("result" => 1);
 		}
 
 		private function uploadGame($data)
 		{
-			# code...
+			if (!isset($data["auth"]) ||
+				!isset($data["question_name"]) ||
+				!isset($data["question_type"]) ||
+				!isset($data["question_option"]) ||
+				!isset($data["question_true"]) ||
+				empty(json_decode($data["question_option"])))
+			{
+				$this->saveLog($data, "", "", "R");
+				return false;
+			}
+			$user = new User();
+			$user = $user
+						->from()
+						->where("user.auth = :auth", [
+							"auth" => $data["auth"]
+						])
+						->select([
+							"usid" => "usid"
+						])
+						->execute(true);
+			if (!is_array($user))
+			{
+				$this->saveLog($data);
+				return false;
+			}
+
+			$question = new Question();
+			$question->qid = $this->generateAuthKey();
+			$question->qusid = $user["usid"];
+			$question->qname = $data["question_name"];
+			$question->qtype = $data["question_type"];
+			$question->qoption = $data["question_option"];
+			$question->qtrue = $data["question_true"];
+			$question->qfrequency = 0;
+
+			if ($question->save())
+			{
+				$req = new Request();
+				$fData = $req->files["file"];
+				// file upload var mı ?
+				if (count($fData) > 0)
+				{
+					$fileId = $this->generateAuthKey();
+					
+					$filePath = _FILE_DIR_ . $fileId . ".". pathinfo($fData["name"])["extension"];
+					if (move_uploaded_file($fData["tmp_name"], $filePath))
+					{
+						$file = new File();
+						$file->fid = $fileId;
+						$file->usid = $user["usid"];
+						$file->fname = $fData["name"];
+						$file->ftype = pathinfo($fData["name"])["extension"];
+						$file->ffunction = "P";
+						$file->fpath = $filePath;
+						if ($file->save())
+						{
+							$this->saveLog($data, $user["usid"], $data["auth"], "S");
+							
+							$questionfile = new Questionfile();
+							$questionfile->qid = $question->qid;
+							$questionfile->fid = $fileId;
+							if ($questionfile->save())
+							{
+								$this->saveLog($data, $user["usid"], $data["auth"], "S");
+								return array("result" => 1);
+							}
+							
+							$this->saveLog($data, $user["usid"], $data["auth"], "E");
+							return false;
+						}
+						else
+						{
+							$this->saveLog($data, $user["usid"], $data["auth"], "E");
+							return false;
+						}
+					}
+					else
+					{
+						$this->saveLog($data, $user["usid"], $data["auth"], "E");
+						return false;
+					}
+				}
+				$this->saveLog($data);
+				return array("result" => 1);
+			}
+			else
+			{
+				$this->saveLog($data);
+				return array("result" => 1);
+			}
 		}
 	}

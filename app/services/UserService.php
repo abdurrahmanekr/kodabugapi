@@ -99,6 +99,7 @@
 					$user->update("usid = :usid", array(
 						"usid" => $userId
 					));
+					$_SESSION["user"] = "Eker";
 					return array(
 						"username" => 1,
 						"password" => 1,
