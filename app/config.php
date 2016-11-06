@@ -26,3 +26,7 @@
 	define("_DB_NAME_", "kodabug");
 	define("_DB_USER_", "root");
 	define("_DB_PASSWORD_", "");
+
+
+	/* GAME */
+	define("_MAX_GAME_TIMEOUT_", 25);

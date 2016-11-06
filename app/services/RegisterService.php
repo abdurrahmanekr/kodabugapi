@@ -21,7 +21,6 @@
 				$this->getTable("User");
 				$this->getTable("Point");
 				$this->getTable("Userpassword");
-				$this->getTable("Log");
 				$this->getTable("File");
 				$this->getTable("Question");
 				$this->getTable("Questionfile");

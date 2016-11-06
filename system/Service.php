@@ -11,7 +11,7 @@
 		public function response($result)
 		{
 			if ($result && $result != null)
-				echo json_encode($result);
+				echo json_encode(array("result" => $result));
 			else
 			{
 				$result = array("result" => -1);
@@ -33,6 +33,9 @@
 
 		public function saveLog($data, $usid =  '', $auth = '', $type = 'A')
 		{
+			if (!class_exists("Log"))
+				$this->getTable("Log");	
+			
 			$log = new Log();
 			$log->lgdate = date("YmdHis");
 			$log->usid = $usid;
