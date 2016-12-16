@@ -40,9 +40,9 @@
 					"fusid" => "INT NOT NULL"
 				))
 				->create("game", array(
-					"gid" => "INT NOT NULL",
-					"gusid" => "INT NOT NULL",
-					"grivalid" => "INT NOT NULL",
+					"gid" => "VARCHAR(255) NOT NULL PRIMARY KEY",
+					"gusid" => "VARCHAR(255) NOT NULL",
+					"grivalid" => "VARCHAR(255) NOT NULL",
 					"uspoint" => "INT NOT NULL",
 					"rivalpoint" => "INT NOT NULL",
 					"gmaxpoint" => "INT NOT NULL"
@@ -75,7 +75,7 @@
 					"auth" => "VARCHAR(255)"
 				))
 				->create("winner", array(
-					"gid" =>  "INT NOT NULL",
+					"gid" =>  "VARCHAR(255) NOT NULL PRIMARY KEY",
 					"usid" =>  "VARCHAR(255) NOT NULL",
 					"windate" =>  "VARCHAR(20)"
 				))
@@ -120,8 +120,11 @@
 
 		public function getTable($table)
 		{
+			$table = strtolower($table);
+
 			if (file_exists("app/models/". $table . ".php"))
-				include_once "app/models/". $table . ".php";
+				require_once "app/models/". $table . ".php";
+			
 		}
 
 		public function execute($type = false)
@@ -136,13 +139,22 @@
 					$result->execute($this->wValues);
 					if ($result->rowCount() > 0)
 						return $result->fetch(PDO::FETCH_ASSOC);
-					return $result;
+					return null;
 				}
 				if ($result)
 					return $result;
 			}
-
-			$result = $this->db->query($this->query, PDO::FETCH_ASSOC);
+			// değilse 
+			if ($this->wValues == null)
+				$result = $this->db->query($this->query, PDO::FETCH_ASSOC);
+			else 
+			{
+				$result = $this->db->prepare($this->query);
+				$result->execute($this->wValues);
+				if ($result->rowCount() > 0)
+					return $result->fetchAll(PDO::FETCH_ASSOC);
+				return null;
+			}
 
 			if ($result == null || !$result->rowCount())
 			{

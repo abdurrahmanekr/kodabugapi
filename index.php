@@ -9,12 +9,12 @@
 	ob_start();
 
 	// Servisin ayarlarının bulunduğu dosyayı include ediyor
-	include_once "app/config.php";
+	require_once __DIR__ . "/app/config.php";
 
 
 	// Tüm sistem çalıştırmak için gerekli dosyaları include yapıyor
 	function __autoload($className) {
-		include_once "system/" . $className . ".php";
+		require_once __DIR__ . "/system/" . $className . ".php";
 	}
 
 	// sitenin yönlendirmelerini başlamasını yönetiyor

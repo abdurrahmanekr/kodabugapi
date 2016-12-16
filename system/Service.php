@@ -17,6 +17,7 @@
 				$result = array("result" => -1);
 				echo json_encode($result);
 			}
+			return false;
 		}
 
 		public function generateAuthKey()

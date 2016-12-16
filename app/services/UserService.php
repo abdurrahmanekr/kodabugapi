@@ -20,6 +20,9 @@
 				// serviste kullanılacak tablolar çekiliyor
 				$this->getTable("User");
 				$this->getTable("Userpassword");
+				$this->getTable("Point");
+				$this->getTable("Log");
+				$this->getTable("File");
 				
 				// varsa çağır çıktısını işleme koy
 				$this->response($this->$method($this->parameters));
@@ -28,7 +31,7 @@
 				$this->response(null);
 		}
 
-		public function getUserVCard($data)
+		private  function getUserVCard($data)
 		{
 			$userId = isset($data["usid"]) ? $data["usid"] : null;
 			if (!$userId)
@@ -37,29 +40,59 @@
 			$user = new User();
 			$query = $user
 						->from()
+						->join("username", array("usid" => "usid"))
 						->join("point", array("usid" => "usid"))
-						->where("user.usid = '$userId'")
+						->where("user.usmail = :id OR username.usname = :id", array(
+							"id" => $userId
+						))
 						->select(array(
-							"usid" => "usid",
 							"copo" => "copo",
 							"hepo" => "hepo",
 							"bugpo" => "bugpo",
 							"fipo" => "fipo",
-							"keypo" => "keypo"
-
+							"keypo" => "keypo",
+							"usname" => "user.usname",
+							"surname" => "user.surname",
+							"uspoint" => "user.uspoint",
+							"usid" => "user.usid"
 						))
 						->execute(true); // tek data olduğu için true
-			if ($query == null)
-				return $user->query;
-
-			
-			$result = array();
-			foreach ($query as $item)
-				array_push($result, $item);
-			return $result;
+			if (is_array($query))
+			{
+				$file = new File();
+				$photo = $file
+							->from()
+							->where("usid = :id AND ffunction = :type", array(
+								"id" => $query["usid"],
+								"type" => "P"
+							))
+							->select(array(
+								"fid" => "fid",
+								"ftype" => "ftype"
+							))
+							->execute(true);
+				if (is_array($photo))
+					$photo = "data:image/". $photo["ftype"] . ";base64," . base64_encode(file_get_contents(_FILE_DIR_ . $photo["fid"] . "." . $photo["ftype"]));
+				else
+					$photo = "";
+				
+				$query = array(
+					"copo" => $query["copo"],
+					"hepo" => $query["hepo"],
+					"bugpo" => $query["bugpo"],
+					"fipo" => $query["fipo"],
+					"keypo" => $query["keypo"],
+					"usname" => $query["usname"],
+					"surname" => $query["surname"],
+					"uspoint" => $query["uspoint"],
+					"photo" => $photo
+				);
+				return $query;
+			}
+			return false;
 		}
 
-		public function loginUser($data)
+		private  function loginUser($data)
 		{
 			$userId = isset($data["usname"]) ? $data["usname"] : null;
 			if (!$userId)
@@ -106,14 +139,12 @@
 						"auth" => $auth
 					);
 				}
-				else if ($query->rowCount() == 0) 
-					return array(
+				else return array(
 						"username" => 1,
 						"password" => -1
 					);
 			}
-			else if ($query->rowCount() == 0)
-				return array(
+			else return array(
 					"username" => -1,
 					"password" => -1
 				);

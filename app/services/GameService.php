@@ -19,6 +19,8 @@
 				$this->getTable("User");
 				$this->getTable("Question");
 				$this->getTable("Log");
+				$this->getTable("Game");
+				$this->getTable("Username");
 
 				// varsa çağır çıktısını işleme koy
 				$this->response($this->$method($this->parameters));
@@ -111,4 +113,108 @@
 			}
 		}
 
+		private function getGameList($data)
+		{
+			$auth = $data["auth"] ? $data["auth"] : null;
+			if ($auth == null)
+				return false;
+
+			$game = new Game();
+			$query = $game
+						->from()
+						->join("user", array("gusid" => "usid"))
+						->where("user.auth = :authkey", array(
+							"authkey" => $auth
+						))
+						->select(array(
+							"game.*"
+						))
+						->execute();
+			if (is_array($query))
+				return $query;
+			return false;
+		}
+
+		private function startGame($data)
+		{
+			$auth = $data["auth"] ? $data["auth"] : null;
+			if ($auth == null)
+				return false;
+			$user = new User();
+			$user = $user
+						->from()
+						->where("user.auth = :auth", [
+							"auth" => $auth
+						])
+						->select([
+							"usid" => "usid"
+						])
+						->execute(true);
+			if (!is_array($user))
+				return false;
+			if (!isset($data["usid"]))
+			{
+				$rival = new User();
+				$rival = $rival
+							->from()
+							->join("username", array("usid" => "usid"))
+							->where("user.usid != :userId", array(
+								"userId" => $user["usid"]
+							))
+							->orderBy("RAND()")
+							->limit(1)
+							->select(array(
+								"usid" => "user.usid",
+								"usmail" => "user.usmail",
+								"usname" => "username.usname"
+							))
+							->execute(true);
+				if (is_array($rival))
+				{
+					$game = new Game();
+					$game->gid = $this->generateAuthKey();
+					$game->gusid = $user["usid"];
+					$game->grivalid = $rival["usid"];
+					$game->uspoint = 0;
+					$game->rivalpoint = 0;
+					$game->gmaxpoint = 0;
+					if (!$game->save())
+						return false;
+					else
+						return array("gid" => $game->gid, "rival" => isset($rival["usname"]) ? $rival["usname"] : $rival["usmail"]);
+				}
+				return false;
+			}
+			else
+			{
+				$rival = new User();
+				$rival = $rival
+							->from()
+							->join("username", array("usid" => "usid"))
+							->where("user.usmail = :usname OR username.usname = :usname", array(
+								"mail" => $data["usid"]
+							))
+							->select(array(
+								"usid" => "user.usid",
+								"usmail" => "user.usmail",
+								"usname" => "username.usname"
+							))
+							->execute(true);
+				if (is_array($rival))
+				{
+					$game = new Game();
+					$game->gid = $this->generateAuthKey();
+					$game->gusid = $user["usid"];
+					$game->grivalid = $rival["usid"];
+					$game->uspoint = 0;
+					$game->rivalpoint = 0;
+					$game->gmaxpoint = 0;
+					if (!$game->save())
+						return false;
+					else
+						return array("gid" => $game->gid, "rival" => isset($rival["usname"]) ? $rival["usname"] : $rival["usmail"]);
+				}
+				return false;
+			}
+		}
 	}

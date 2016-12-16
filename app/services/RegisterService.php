@@ -20,6 +20,7 @@
 				// serviste kullanılacak tablolar çekiliyor
 				$this->getTable("User");
 				$this->getTable("Point");
+				$this->getTable("Log");
 				$this->getTable("Userpassword");
 				$this->getTable("File");
 				$this->getTable("Question");
@@ -42,13 +43,17 @@
 				$this->saveLog($data, "", "", "R");
 				return false;
 			}
+			$birth = new DateTime($data["birth"]);
+		    if (!$birth)
+				return false;
+
 			// user tablosu
 			$user = new User();
 			$user->usname = $data["usname"];
 			$user->surname = $data["surname"];
 			$user->usmail = $data["usmail"];
 			$user->uspoint = 0; 
-			$user->birth = $data["birth"];
+			$user->birth = $birth->format('Y-m-d');
 			$query = $user
 						->from()
 						->join("username", array("usid" => "usid"))

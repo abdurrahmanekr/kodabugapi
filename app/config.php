@@ -19,13 +19,13 @@
 		exit(0);
 	}
 
-	date_default_timezone_set("Europe/Istanbul");
+	date_default_timezone_set("Europe/Moscow");
 	define("_SITE_URL_", "http://localhost/kodabug");
 	define("_FILE_DIR_", __DIR__ . "/uploads/");
 	define("_HOST_NAME_", "localhost");
 	define("_DB_NAME_", "kodabug");
 	define("_DB_USER_", "root");
-	define("_DB_PASSWORD_", "");
+	define("_DB_PASSWORD_", "1234");
 
 
 	/* GAME */

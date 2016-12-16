@@ -71,7 +71,10 @@
 			$this->query .= " LEFT JOIN $table ON";
 			$i = 0;
 			foreach ($equals as $key => $value) {
-				$this->query .= " $name.$key = $table.$value";
+				if (is_array($value))
+					$this->query .= " $name.$key = $value[0]";
+				else
+					$this->query .= " $name.$key = $table.$value";
 				if (++$i != count($equals))
 					$this->query .= " AND";
 			}
