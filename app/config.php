@@ -20,13 +20,25 @@
 	}
 
 	date_default_timezone_set("Europe/Moscow");
-	define("_SITE_URL_", "http://localhost/kodabug");
-	define("_FILE_DIR_", __DIR__ . "/uploads/");
-	define("_HOST_NAME_", "localhost");
-	define("_DB_NAME_", "kodabug");
-	define("_DB_USER_", "root");
-	define("_DB_PASSWORD_", "1234");
+	define("_MODE_", "release"); // release - debug
+	if (_MODE_ == "release") {
 
+		define("_SITE_URL_", "http://testrest.avarekodcu.com");
+		define("_FILE_DIR_", __DIR__ . "/uploads/");
+		define("_HOST_NAME_", "localhost");
+		define("_DB_NAME_", "avarekod_kodabug");
+		define("_DB_USER_", "avarekod_root");
+		define("_DB_PASSWORD_", "APO58Apo::method");
+
+	} else {
+		
+		define("_SITE_URL_", "http://localhost/kodabug");
+		define("_FILE_DIR_", __DIR__ . "/uploads/");
+		define("_HOST_NAME_", "localhost");
+		define("_DB_NAME_", "kodabug");
+		define("_DB_USER_", "root");
+		define("_DB_PASSWORD_", "1234");
+	}
 
 	/* GAME */
 	define("_MAX_GAME_TIMEOUT_", 25);
