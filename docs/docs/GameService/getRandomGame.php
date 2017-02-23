@@ -1,7 +1,7 @@
 <p><a href="#"><?=$_GET['service']?></a> / <?=$_GET['method']?></p>
 
 <p class="description-method">
-	Oyun oynamak için kuyruğa oyun atar
+	Oyun oynamak için kuyruğa oyun atar, yaklaşık 20 saniyelik bir içinde cevaplanması gerekir. Aksi taktirde oyuncu kaybetmiş sayılır
 </p>
 
 <p>

@@ -67,22 +67,22 @@
 		<td>user_point (kullanıcı puanı)</td>
 	</tr>
 	<tr>
-		<td>usid</td>
-		<td>user_id (kullanıcı id'si)</td>
+		<td>photo</td>
+		<td>Kullanıcının base64 resmi</td>
 	</tr>
 </table>
 <!-- örnek cevap -->
 <h3>Gelen Örnek Cevap</h3>
 <p>
 <pre>{
-	"copo": "0",
-	"hepo": "0",
-	"bugpo": "0",
-	"fipo": "0",
-	"keypo": "0",
-	"usname": "Abdurrahman",
-	"surname": "Eker",
-	"uspoint": "65536",
-	"usid": "avarekodcu"
+	copo: "0",
+	hepo: "0",
+	bugpo: "0",
+	fipo: "0",
+	keypo: "0",
+	usname: "Abdurrahman",
+	surname: "Eker",
+	uspoint: "0",
+	photo: ""
 }</pre>
 </p>

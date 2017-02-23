@@ -1,12 +1,12 @@
 <p><a href="#"><?=$_GET['service']?></a> / <?=$_GET['method']?></p>
 
 <p class="description-method">
-	Belirli bir rakiple oyun oynamak için kullanılır
+	Rasgele bir rakiple oyun oynamak için veya belirli bir rakiple oynamak için kullanılır. Belirli bir rakiple oynamak için usid alanı doldurulmalıdır.
 </p>
 
 <p>
 <pre>/<?=$_GET['service']?>?data={"method": "<?=$_GET['method']?>",
-	"usid": "avarekodcu",
+	"usid": "info@avarekodcu.com",
 	"session_ticket": "QWJkdXJyYWhtYW4gZWtlcg=="
 }</pre>
 </p>
@@ -18,8 +18,8 @@
 		<th>Açıklama</th>
 	</tr>
 	<tr>
-		<td>usid</td>
-		<td>Rakip kullanıcının idsi</td>
+		<td>usid (isteğe bağlı)</td>
+		<td>Rakip kullanıcının idsi bu alan girilmediği zaman rasgele kullanıcı ile oyun oynar</td>
 	</tr>
 	<tr>
 		<td>session_ticket</td>
@@ -35,35 +35,19 @@
 		<th>Açıklama</th>
 	</tr>
 	<tr>
-		<td>question</td>
-		<td>İstenilen oyunun değerleri</td>
-	</tr>
-	<tr>
 		<td>qid</td>
 		<td>Oyunun unique idsi</td>
 	</tr>
 	<tr>
-		<td>qusid</td>
-		<td>Oyunu oluşturan kullanıcı idsi</td>
-	</tr>
-	<tr>
-		<td>qname</td>
-		<td>Oyunun başlığı</td>
-	</tr>
-	<tr>
-		<td>qtype</td>
-		<td>Sorunun tipi</td>
-	</tr>
-	<tr>
-		<td>qoption</td>
-		<td>Sorunun şıkları</td>
+		<td>rival</td>
+		<td>Rakip kullanıcının idsi</td>
 	</tr>
 </table>
 <!-- örnek cevap -->
 <h3>Gelen Örnek Cevap</h3>
 <p>
 <pre>{
-	"qid": "1",
-	"rival": "rivalkodcu"
+	gid: "7fd1769442fa28fe442927b25d95b862",
+	rival: "info@rivalkodcu.com"
 }</pre>
 </p>

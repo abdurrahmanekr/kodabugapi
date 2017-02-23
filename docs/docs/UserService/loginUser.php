@@ -6,8 +6,8 @@
 
 <p>
 <pre>/<?=$_GET['service']?>?data={"method": "<?=$_GET['method']?>",
-	"usname": "avarekodcu",
-	"password": "AvareKodcu::!!ÜÜ"
+	"usname": "info@avarekodcu.com",
+	"password": "AvareAvareÇÇ::"
 }</pre>
 </p>
 <h3>Giden Parametre</h3>

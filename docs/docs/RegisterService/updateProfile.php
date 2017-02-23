@@ -59,15 +59,9 @@
 		<th>Parametre</th>
 		<th>Açıklama</th>
 	</tr>
-	<tr>
-		<td>result</td>
-		<td>Güncelleme işlemi başarılı ise 1 değilse -1 gelir</td>
-	</tr>
 </table>
 <!-- örnek cevap -->
 <h3>Gelen Örnek Cevap</h3>
 <p>
-<pre>{
-	"result": "1"
-}</pre>
+<pre>1</pre>
 </p>

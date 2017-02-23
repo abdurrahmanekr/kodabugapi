@@ -5,7 +5,7 @@
 		public $lgid = null;
 		public $lgdate = null;
 		public $usid = null;
-		public $auth = null;
+		public $sticket = null;
 		public $type = null;
 		public $result = null;
 
@@ -16,14 +16,14 @@
 												lgid = ?,
 												lgdate = ?,
 												usid = ?,
-												auth = ?,
+												sticket = ?,
 												type = ?,
 												result = ?");
 			$insert = $query->execute(array(
 				$this->lgid,
 				$this->lgdate,
 				$this->usid,
-				$this->auth,
+				$this->sticket,
 				$this->type,
 				$this->result
 			));
@@ -45,8 +45,8 @@
 				$fields["lgdate"] = $this->lgdate;
 			if ($this->usid != null)
 				$fields["usid"] = $this->usid;
-			if ($this->auth != null)
-				$fields["auth"] = $this->auth;
+			if ($this->sticket != null)
+				$fields["sticket"] = $this->sticket;
 			if ($this->type != null)
 				$fields["type"] = $this->type;
 			if ($this->result != null)

@@ -127,8 +127,8 @@
 				if (is_array($query))
 				{
 					// kullanıcı authkey yeniliyor
-					$auth = $this->generateAuthKey();
-					$user->auth = $auth;
+					$sticket = $this->generateAuthKey();
+					$user->sticket = $sticket;
 					$user->update("usid = :usid", array(
 						"usid" => $userId
 					));
@@ -136,7 +136,7 @@
 					return array(
 						"username" => 1,
 						"password" => 1,
-						"auth" => $auth
+						"session_ticket" => $sticket
 					);
 				}
 				else return array(

@@ -52,7 +52,7 @@
 				return false;
 			}
 			// data var mı ? varsa nulldan farklı mı ve json mı ?
-			else if (!isset($req->get["data"]) || $req->get["data"] == null || json_decode(base64_decode($req->get["data"]), true) == null)
+			else if (!isset($req->get["data"]) || $req->get["data"] == null || json_decode(htmlspecialchars_decode($req->get["data"]), true) == null)
 			{
 				return false;
 			}
@@ -60,6 +60,6 @@
 			else if (!file_exists("app/services/" . $this->url[1] . ".php"))
 				return false;
 			
-			return json_decode(base64_decode($req->get["data"]), true);
+			return json_decode(htmlspecialchars_decode($req->get["data"]), true);
 		}
 	}

@@ -75,7 +75,7 @@
 			// use session
 			$authKey = $this->generateAuthKey();
 			$user->usid = $userId;
-			$user->auth = $authKey;
+			$user->sticket = $authKey;
 			
 			$pass = new Userpassword();
 			$pass->usid = $userId;
@@ -98,7 +98,7 @@
 				{
 					if ($pass->save())
 					{
-						return array("exist" => 0, "auth" => $authKey);
+						return array("exist" => 0, "session_ticket" => $authKey);
 					}
 					else
 					{
@@ -121,7 +121,7 @@
 
 		private function updateProfile($data)
 		{
-			if (!isset($data["auth"]))
+			if (!isset($data["session_ticket"]))
 			{
 				$this->saveLog($data);
 				return false;
@@ -130,8 +130,8 @@
 			$user = new User();
 			$user = $user
 						->from()
-						->where("user.auth = :auth", [
-							"auth" => $data["auth"]
+						->where("user.sticket = :sticket", [
+							"sticket" => $data["session_ticket"]
 						])
 						->select([
 							"usid" => "usid"
@@ -163,18 +163,18 @@
 					$file->fpath = $filePath;
 					if ($file->save())
 					{
-						$this->saveLog($data, $user["usid"], $data["auth"], "S");
-						return array("result" => 1);
+						$this->saveLog($data, $user["usid"], $data["session_ticket"], "S");
+						return 1;
 					}
 					else
 					{
-						$this->saveLog($data, $user["usid"], $data["auth"], "E");
+						$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
 						return false;
 					}
 				}
 				else
 				{
-					$this->saveLog($data, $user["usid"], $data["auth"], "E");
+					$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
 					return false;
 				}
 			}
@@ -192,11 +192,11 @@
 
 				if ($upgradeUser->update("usid = :userid", ["userid" => $user["usid"]]))
 				{
-					$this->saveLog($data, $user["usid"], $data["auth"], "S");
+					$this->saveLog($data, $user["usid"], $data["session_ticket"], "S");
 				}
 				else
 				{
-					$this->saveLog($data, $user["usid"], $data["auth"], "E");
+					$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
 					return false;
 				}
 			}
@@ -207,26 +207,27 @@
 				$password->password = md5(md5($user["usid"] . "mustafa sandal ama kürekte yok") . $user["usid"] . "ne var ne yok dopin yoksa sana madalya yok" . $data["password"] . md5("kormada var gül diye sevdiğim dikende var"));
 				if ($password->update("usid = :userid", ["userid" => $user["usid"]]))
 				{
-					$this->saveLog($data, $user["usid"], $data["auth"], "S");
+					$this->saveLog($data, $user["usid"], $data["session_ticket"], "S");
 				}
 				else
 				{
-					$this->saveLog($data, $user["usid"], $data["auth"], "E");
+					$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
 					return false;
 				}
 				
 			}
 
-			return array("result" => 1);
+			return 1;
 		}
 
 		private function uploadGame($data)
 		{
-			if (!isset($data["auth"]) ||
+			if (!isset($data["session_ticket"]) ||
 				!isset($data["question_name"]) ||
 				!isset($data["question_type"]) ||
 				!isset($data["question_option"]) ||
 				!isset($data["question_true"]) ||
+				!intval($data["question_type"]) != 0 ||
 				empty(json_decode($data["question_option"])))
 			{
 				$this->saveLog($data, "", "", "R");
@@ -235,8 +236,8 @@
 			$user = new User();
 			$user = $user
 						->from()
-						->where("user.auth = :auth", [
-							"auth" => $data["auth"]
+						->where("user.sticket = :sticket", [
+							"sticket" => $data["session_ticket"]
 						])
 						->select([
 							"usid" => "usid"
@@ -278,39 +279,39 @@
 						$file->fpath = $filePath;
 						if ($file->save())
 						{
-							$this->saveLog($data, $user["usid"], $data["auth"], "S");
+							$this->saveLog($data, $user["usid"], $data["session_ticket"], "S");
 							
 							$questionfile = new Questionfile();
 							$questionfile->qid = $question->qid;
 							$questionfile->fid = $fileId;
 							if ($questionfile->save())
 							{
-								$this->saveLog($data, $user["usid"], $data["auth"], "S");
-								return array("result" => 1);
+								$this->saveLog($data, $user["usid"], $data["session_ticket"], "S");
+								return array("exist" => 0, "question_id" => $question->qid);
 							}
 							
-							$this->saveLog($data, $user["usid"], $data["auth"], "E");
+							$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
 							return false;
 						}
 						else
 						{
-							$this->saveLog($data, $user["usid"], $data["auth"], "E");
+							$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
 							return false;
 						}
 					}
 					else
 					{
-						$this->saveLog($data, $user["usid"], $data["auth"], "E");
+						$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
 						return false;
 					}
 				}
 				$this->saveLog($data);
-				return array("result" => 1);
+				return array("exist" => 0, "question_id" => $question->qid);
 			}
 			else
 			{
 				$this->saveLog($data);
-				return array("result" => 1);
+				return false;
 			}
 		}
 	}

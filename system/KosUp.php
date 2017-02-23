@@ -8,23 +8,20 @@
 	
 	class KosUp {
 
-		function __construct()
+		function __construct($db)
 		{
-			$cnn = @mysql_connect(_HOST_NAME_, _DB_USER_, _DB_PASSWORD_);
-			$dbCnn = @mysql_select_db(_DB_NAME_);
-			mysql_query("SET NAMES UTF8");
-			
 			$result = array();
 
-			$this->GenerateKosUp($result, _DB_NAME_);
+			$this->GenerateKosUp($result, $db);
 		}
 
 		private function GenerateKosUp($result, $db)
 		{
-			$query = mysql_query("SELECT TABLE_NAME, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='$db'");
+			$q = "SELECT TABLE_NAME, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA='"._DB_NAME_."'";
+			$query = $db->query($q, PDO::FETCH_ASSOC);
 			$table = array();
 			$column = array();
-			while ($item = mysql_fetch_array($query))
+			foreach ($query as $item)
 				if (!isset($table[$item["TABLE_NAME"]])) {
 					$table[$item["TABLE_NAME"]] = array();
 					$table[$item["TABLE_NAME"]][] = $item["COLUMN_NAME"];

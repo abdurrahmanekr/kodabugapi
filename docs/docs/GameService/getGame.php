@@ -30,24 +30,8 @@
 		<th>Açıklama</th>
 	</tr>
 	<tr>
-		<td>question</td>
-		<td>İstenilen oyunun değerleri</td>
-	</tr>
-	<tr>
-		<td>qid</td>
-		<td>Oyunun unique idsi</td>
-	</tr>
-	<tr>
-		<td>qusid</td>
-		<td>Oyunu oluşturan kullanıcı idsi</td>
-	</tr>
-	<tr>
 		<td>qname</td>
 		<td>Oyunun başlığı</td>
-	</tr>
-	<tr>
-		<td>qtype</td>
-		<td>Sorunun tipi</td>
 	</tr>
 	<tr>
 		<td>qoption</td>
@@ -58,10 +42,7 @@
 <h3>Gelen Örnek Cevap</h3>
 <p>
 <pre>{
-	"qid" : "1",
-	"qusid" : "avarekodcu",
 	"qname" : "var değişken tanımlamada kullanılan ifadenin gerçek anlamı nedir ?",
-	"qtype" : "Text",
 	"qoption" : "['variable','varable', 'value', 'vatikan']",
 }</pre>
 </p>

@@ -5,7 +5,7 @@
 	<link rel="stylesheet" href="css/devdiv.min.css"/>
 	<link rel="stylesheet" href="css/prism.css"/>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
-	<title>Documentation</title>
+	<title>Kodabug Documentation</title>
 	<style>
 		html,
 		body {

@@ -59,20 +59,20 @@
 <p>
 <pre>[
 	{
-		"gid" : "1",
-		"gusid" : "avarekodcu",
-		"grivalid" : "rivalkodcu",
-		"uspoint" : "65536",
-		"rivalpoint" : "4",
-		"gmaxpoint" : "5"
+		gid: "3d703d9474902492334649b405500b16",
+		gusid: "1e9238555fc3e8a87ee4e02cf60264bf",
+		grivalid: "eb9028673f8c662e303efb7e199339cf",
+		uspoint: "0",
+		rivalpoint: "0",
+		gmaxpoint: "0"
 	},
 	{
-		"gid" : "2",
-		"gusid" : "rivalkodcu",
-		"grivalid" : "avarekodcu",
-		"uspoint" : "1024",
-		"rivalpoint" : "1",
-		"gmaxpoint" : "3"
+		gid: "58ebfd282ea3872d41a694431709456d",
+		gusid: "1e9238555fc3e8a87ee4e02cf60264bf",
+		grivalid: "eb9028673f8c662e303efb7e199339cf",
+		uspoint: "0",
+		rivalpoint: "0",
+		gmaxpoint: "0"
 	},
 	.
 	.

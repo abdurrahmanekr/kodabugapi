@@ -19,7 +19,7 @@
 					if ($value)
 						$this->db->exec($value);
 
-				// new KosUp();
+				// new KosUp($this->db);
 			}
 			catch ( PDOException $e )
 			{
@@ -72,7 +72,7 @@
 					"usmail" => "VARCHAR(320)", // {64}@{255} '.url dahil'
 					"uspoint" => "INT NOT NULL",
 					"birth" => "VARCHAR (20)",
-					"auth" => "VARCHAR(255)"
+					"sticket" => "VARCHAR(255)"
 				))
 				->create("winner", array(
 					"gid" =>  "VARCHAR(255) NOT NULL PRIMARY KEY",
@@ -100,7 +100,7 @@
 					"lgid" => "INT NOT NULL PRIMARY KEY AUTO_INCREMENT",
 					"lgdate" => "VARCHAR(20) NOT NULL",
 					"usid" => "VARCHAR(255)",
-					"auth" => "VARCHAR(255)",
+					"sticket" => "VARCHAR(255)",
 					"type" => "ENUM('E', 'S', 'R', 'A')", // E->error, S->success, R-> Request, A-> Anonymouss
 					"result" => "TEXT"
 				))

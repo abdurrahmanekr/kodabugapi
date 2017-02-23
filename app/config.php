@@ -20,7 +20,8 @@
 	}
 
 	date_default_timezone_set("Europe/Moscow");
-	define("_MODE_", "release"); // release - debug
+	// define("_MODE_", "release"); // release - debug
+	define("_MODE_", "debug"); // release - debug
 	if (_MODE_ == "release") {
 
 		define("_SITE_URL_", "http://testrest.avarekodcu.com");

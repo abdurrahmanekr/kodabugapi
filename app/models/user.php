@@ -8,7 +8,7 @@
 		public $usmail = null;
 		public $uspoint = null;
 		public $birth = null;
-		public $auth = null;
+		public $sticket = null;
 
 		public function save()
 		{
@@ -20,7 +20,7 @@
 												usmail = ?,
 												uspoint = ?,
 												birth = ?,
-												auth = ?");
+												sticket = ?");
 			$insert = $query->execute(array(
 				$this->usid,
 				$this->usname,
@@ -28,7 +28,7 @@
 				$this->usmail,
 				$this->uspoint,
 				$this->birth,
-				$this->auth
+				$this->sticket
 			));
 			if ($insert)
 				return true;
@@ -54,8 +54,8 @@
 				$fields["uspoint"] = $this->uspoint;
 			if ($this->birth != null)
 				$fields["birth"] = $this->birth;
-			if ($this->auth != null)
-				$fields["auth"] = $this->auth;
+			if ($this->sticket != null)
+				$fields["sticket"] = $this->sticket;
 			$i = 0;
 			foreach ($fields as $key => $value)
 			{ 

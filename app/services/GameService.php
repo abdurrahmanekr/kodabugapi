@@ -77,7 +77,6 @@
 				$this->saveLog($data, "", "", "E");
 				return false;
 			}
-			print_r($query);
 			$_SESSION["questionId"] = $query["qid"];
 			$_SESSION["gameRequest"] = false;
 			return 1;
@@ -85,12 +84,14 @@
 
 		private function getTrueOption($data)
 		{
-			if (time() - $_SESSION["timeout"] <= _MAX_GAME_TIMEOUT_ && $_SESSION["gameRequest"] == true && $_SESSION["questionId"])
+			if (time() - $_SESSION["timeout"] <= _MAX_GAME_TIMEOUT_ && $_SESSION["gameRequest"] == true && $_SESSION["questionId"] && isset($data["session_ticket"]) && isset($data["try"]))
 			{
 				$question = new Question();
 				$query = $question
 								->from()
-								->where("qid = :qid", ["qid" => $_SESSION["questionId"]])
+								->where("question.qid = :qid", [
+									"qid" => $_SESSION["questionId"]
+								])
 								->select([
 									"qtrue" => "qtrue"
 								])
@@ -102,7 +103,7 @@
 				}
 
 				$_SESSION["questionId"] = null;
-				return $query["qtrue"];
+				return $query;
 			}
 			else
 			{
@@ -115,16 +116,16 @@
 
 		private function getGameList($data)
 		{
-			$auth = $data["auth"] ? $data["auth"] : null;
-			if ($auth == null)
+			$sticket = $data["session_ticket"] ? $data["session_ticket"] : null;
+			if ($sticket == null)
 				return false;
 
 			$game = new Game();
 			$query = $game
 						->from()
 						->join("user", array("gusid" => "usid"))
-						->where("user.auth = :authkey", array(
-							"authkey" => $auth
+						->where("user.sticket = :sticket", array(
+							"sticket" => $sticket
 						))
 						->select(array(
 							"game.*"
@@ -137,14 +138,14 @@
 
 		private function startGame($data)
 		{
-			$auth = $data["auth"] ? $data["auth"] : null;
-			if ($auth == null)
+			$sticket = $data["session_ticket"] ? $data["session_ticket"] : null;
+			if ($sticket == null)
 				return false;
 			$user = new User();
 			$user = $user
 						->from()
-						->where("user.auth = :auth", [
-							"auth" => $auth
+						->where("user.sticket = :sticket", [
+							"sticket" => $sticket
 						])
 						->select([
 							"usid" => "usid"

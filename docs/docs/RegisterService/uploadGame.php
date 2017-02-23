@@ -7,8 +7,8 @@
 <p>
 <pre>/<?=$_GET['service']?>?data={"method": "<?=$_GET['method']?>",
 	"question_name": "var değişken tanımlamada kullanılan ifadenin gerçek anlamı nedir ?",
-	"question_type": "Text",
-	"question_option": "['variable','varable', 'value', 'vatikan']"
+	"question_type": "1",
+	"question_option": "[\"variable\",\"varable\", \"value\", \"vatikan\"]",
 	"question_true": "0",
 	"file": "multipart/form-data",
 	"session_ticket": "QWJkdXJyYWhtYW4gZWtlcg=="
@@ -56,18 +56,18 @@
 	</tr>
 	<tr>
 		<td>exist</td>
-		<td>Bu email'in daha önce alınıp alınmadığını belirtir. Eğer alınmışsa kayıt başarılı olmaz (0, 1)</td>
+		<td>Bu sorunun daha önce olup olmadığını belirtir. Eğer varsa kayıt başarılı olmaz (0, 1)</td>
 	</tr>
 	<tr>
-		<td>session_ticket</td>
-		<td>Yeni kullanıcının ilk oturum numarası</td>
+		<td>question_id</td>
+		<td>Eğer soru oluşmuş ise bu sorunun id'sidir</td>
 	</tr>
 </table>
 <!-- örnek cevap -->
 <h3>Gelen Örnek Cevap</h3>
 <p>
 <pre>{
-	"exist": "0",
-	"session_ticket": "QWJkdXJyYWhtYW4gZWtlcg=="
+	exist: 0,
+	question_id: "f565d6ff7150ae8e4ae6cf30ddd10cc5"
 }</pre>
 </p>
