@@ -2,3 +2,5 @@
 # http://git-scm.com/docs/gitignore
 
 app/uploads/
+
+.DS_Store
