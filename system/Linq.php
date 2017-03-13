@@ -68,7 +68,12 @@
 				return false;
 			}
 			$name = $this->tableName;
-			$this->query .= " LEFT JOIN $table ON";
+			if (is_array($table)) {
+				$this->query .= " LEFT JOIN ". $table[key($table)] . " AS " . key($table) ." ON";
+				$table = key($table);
+			}
+			else
+				$this->query .= " LEFT JOIN $table ON";
 			$i = 0;
 			foreach ($equals as $key => $value) {
 				if (is_array($value))

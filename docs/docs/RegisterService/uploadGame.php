@@ -8,7 +8,7 @@
 <pre>/<?=$_GET['service']?>?data={"method": "<?=$_GET['method']?>",
 	"question_name": "var değişken tanımlamada kullanılan ifadenin gerçek anlamı nedir ?",
 	"question_type": "1",
-	"question_option": "[\"variable\",\"varable\", \"value\", \"vatikan\"]",
+	"question_option": ["variable","varable", "value", "vatikan"],
 	"question_true": "0",
 	"file": "multipart/form-data",
 	"session_ticket": "QWJkdXJyYWhtYW4gZWtlcg=="

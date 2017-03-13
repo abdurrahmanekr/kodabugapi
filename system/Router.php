@@ -52,13 +52,19 @@
 				return false;
 			}
 			// data var mı ? varsa nulldan farklı mı ve json mı ?
-			else if (!isset($req->get["data"]) || $req->get["data"] == null || json_decode(htmlspecialchars_decode($req->get["data"]), true) == null)
+			else if (!isset($req->get["data"]) || $req->get["data"] == null)
 			{
 				return false;
 			}
 			// istekte bulunduğu servis var mı ?
 			else if (!file_exists("app/services/" . $this->url[1] . ".php"))
 				return false;
+
+			if (base64_decode($req->get["data"])) {
+				$data = json_decode(base64_decode(htmlspecialchars_decode($req->get["data"])), true);
+				if (isset($data))
+					return $data;
+			}
 			
 			return json_decode(htmlspecialchars_decode($req->get["data"]), true);
 		}

@@ -228,7 +228,7 @@
 				!isset($data["question_option"]) ||
 				!isset($data["question_true"]) ||
 				!intval($data["question_type"]) != 0 ||
-				empty(json_decode($data["question_option"])))
+				!is_array($data["question_option"]))
 			{
 				$this->saveLog($data, "", "", "R");
 				return false;
@@ -254,7 +254,7 @@
 			$question->qusid = $user["usid"];
 			$question->qname = $data["question_name"];
 			$question->qtype = $data["question_type"];
-			$question->qoption = $data["question_option"];
+			$question->qoption = json_encode($data["question_option"]);
 			$question->qtrue = $data["question_true"];
 			$question->qfrequency = 0;
 

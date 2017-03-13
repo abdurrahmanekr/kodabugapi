@@ -123,13 +123,19 @@
 			$game = new Game();
 			$query = $game
 						->from()
-						->join("user", array("gusid" => "usid"))
-						->where("user.sticket = :sticket", array(
+						->join("user", ["gusid" => "usid"])
+						->join(["rivaluser" => "user"], ["grivalid" => "usid"])
+						->where("user.sticket = :sticket", [
 							"sticket" => $sticket
-						))
-						->select(array(
-							"game.*"
-						))
+						])
+						->select([
+							"gid" => "game.gid",
+							"gusid" => "user.usmail",
+							"grivalid" => "rivaluser.usmail",
+							"uspoint" => "game.uspoint",
+							"rivalpoint" => "game.rivalpoint",
+							"gmaxpoint" => "game.gmaxpoint"
+						])
 						->execute();
 			if (is_array($query))
 				return $query;
@@ -193,7 +199,7 @@
 							->from()
 							->join("username", array("usid" => "usid"))
 							->where("user.usmail = :usname OR username.usname = :usname", array(
-								"mail" => $data["usid"]
+								"usname" => $data["usid"]
 							))
 							->select(array(
 								"usid" => "user.usid",
