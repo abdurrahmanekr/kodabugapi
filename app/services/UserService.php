@@ -85,6 +85,7 @@
 					"usname" => $query["usname"],
 					"surname" => $query["surname"],
 					"uspoint" => $query["uspoint"],
+					"usid" => $userId,
 					"photo" => $photo
 				);
 				return $query;
