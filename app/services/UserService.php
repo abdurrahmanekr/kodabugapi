@@ -1,5 +1,5 @@
 <?php
-	
+
 	/**
 	* @author: Abdurrahman Eker
 	* date : 12.10.2016
@@ -23,7 +23,7 @@
 				$this->getTable("Point");
 				$this->getTable("Log");
 				$this->getTable("File");
-				
+
 				// varsa çağır çıktısını işleme koy
 				$this->response($this->$method($this->parameters));
 			}
@@ -71,11 +71,11 @@
 								"ftype" => "ftype"
 							))
 							->execute(true);
-				if (is_array($photo))
+				if (is_array($photo) && file_exists(_FILE_DIR_ . $photo["fid"] . "." . $photo["ftype"]))
 					$photo = "data:image/". $photo["ftype"] . ";base64," . base64_encode(file_get_contents(_FILE_DIR_ . $photo["fid"] . "." . $photo["ftype"]));
 				else
 					$photo = "";
-				
+
 				$query = array(
 					"copo" => $query["copo"],
 					"hepo" => $query["hepo"],
@@ -109,7 +109,7 @@
 							"usid" => "user.usid"
 						))
 						->execute(true); // tek data olduğu için true
-			
+
 			if (is_array($query))
 			{
 				$userId = $query["usid"];

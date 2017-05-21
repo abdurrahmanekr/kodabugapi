@@ -29,7 +29,6 @@
 				unset($this->url);
 		}
 
-		// 1.2.1
 		public function open($parameters)
 		{
 			// servis ctrlVandalism çalışınca tetiklenmesi açıkları engellemiş olur.
@@ -37,12 +36,11 @@
 			return new $this->url[1]($parameters);
 		}
 
-		// 1.1.1
 		private function ctrlVandalism()
 		{
 			$req = new Request();
 			// istek atıldı mı ?
-			if (!isset($this->url) || $this->url[0] != "service") 
+			if (!isset($this->url) || $this->url[0] != "service")
 			{
 				return false;
 			}
@@ -65,7 +63,8 @@
 				if (isset($data))
 					return $data;
 			}
-			
+
 			return json_decode(htmlspecialchars_decode($req->get["data"]), true);
 		}
+
 	}
