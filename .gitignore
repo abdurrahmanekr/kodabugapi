@@ -1,1 +1,11 @@
+<<<<<<< HEAD
 *vendor
+=======
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore test
+
+app/uploads/
+
+.DS_Store
+>>>>>>> df790b5861449d75e1ccb4ef112095e765434863
+vendor
