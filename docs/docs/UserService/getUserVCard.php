@@ -1,7 +1,7 @@
 <p><a href="#"><?=$_GET['service']?></a> / <?=$_GET['method']?></p>
 
 <p class="description-method">
-	Bir kullanıcının basit ve sade bir biçimde bilgilerini getiren service
+	Bir kullanıcının basit ve sade bir biçimde bilgilerini getiren method, eğer bu methodu çağıran kişi kendisi ise özel bilgilerini de getirir
 </p>
 
 <p>
@@ -70,6 +70,14 @@
 		<td>photo</td>
 		<td>Kullanıcının base64 resmi</td>
 	</tr>
+	<tr>
+		<td>usmail (gizli)</td>
+		<td>kullanıcının mail adresi</td>
+	</tr>
+	<tr>
+		<td>birth (gizli)</td>
+		<td>kullanıcının doğum günü</td>
+	</tr>
 </table>
 <!-- örnek cevap -->
 <h3>Gelen Örnek Cevap</h3>
@@ -84,5 +92,23 @@
 	surname: "Eker",
 	uspoint: "0",
 	photo: ""
-}</pre>
+}
+
+eğer kendisi çağırmışsa:
+
+{
+	copo: "0",
+	hepo: "0",
+	bugpo: "0",
+	fipo: "0",
+	keypo: "0",
+	usname: "Abdurrahman",
+	surname: "Eker",
+	uspoint: "0",
+	photo: "",
+	birth: "10-0-1996",
+	usmail: "info@avarekodcu.com"
+
+}
+</pre>
 </p>
