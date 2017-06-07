@@ -36,6 +36,25 @@
 			$userId = isset($data["usid"]) ? $data["usid"] : null;
 			if (!$userId)
 				return null;
+			if (!isset($data["session_ticket"]))
+			{
+				$this->saveLog($data);
+				return false;
+			}
+
+			$meUser = new User();
+			$meUser = $meUser
+						->from()
+						->where("user.sticket = :sticket", [
+							"sticket" => $data["session_ticket"]
+						])
+						->select([
+							"usid" => "usid"
+						])
+						->execute(true);
+			if (!is_array($meUser))
+				return false;
+
 
 			$user = new User();
 			$query = $user
@@ -54,6 +73,8 @@
 							"usname" => "user.usname",
 							"surname" => "user.surname",
 							"uspoint" => "user.uspoint",
+							"birth" => "user.birth",
+							"usmail" => "user.usmail",
 							"usid" => "user.usid"
 						))
 						->execute(true); // tek data olduğu için true
@@ -76,7 +97,7 @@
 				else
 					$photo = "";
 
-				$query = array(
+				$result = array(
 					"copo" => $query["copo"],
 					"hepo" => $query["hepo"],
 					"bugpo" => $query["bugpo"],
@@ -88,7 +109,13 @@
 					"usid" => $userId,
 					"photo" => $photo
 				);
-				return $query;
+
+				// kendi ise özel bilgilerini gönder
+				if ($query["usid"] == $meUser["usid"]) {
+					$result["birth"] = $query["birth"];
+					$result["usmail"] = $query["usmail"];
+				}
+				return $result;
 			}
 			return false;
 		}
@@ -133,7 +160,7 @@
 					$user->update("usid = :usid", array(
 						"usid" => $userId
 					));
-					$_SESSION["user"] = "Eker";
+
 					return array(
 						"username" => 1,
 						"password" => 1,

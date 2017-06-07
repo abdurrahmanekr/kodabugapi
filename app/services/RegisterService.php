@@ -1,5 +1,5 @@
 <?php
-	
+
 	/**
 	* @author: Abdurrahman Eker
 	* date : 16.10.2016
@@ -22,6 +22,7 @@
 				$this->getTable("Point");
 				$this->getTable("Log");
 				$this->getTable("Userpassword");
+				$this->getTable("Username");
 				$this->getTable("File");
 				$this->getTable("Question");
 				$this->getTable("Questionfile");
@@ -36,7 +37,7 @@
 		private function register($data)
 		{
 			if (!isset($data["usname"]) ||
-				!isset($data["surname"]) || 
+				!isset($data["surname"]) ||
 				!isset($data["usmail"]) ||
 				!isset($data["password"]))
 			{
@@ -52,7 +53,7 @@
 			$user->usname = $data["usname"];
 			$user->surname = $data["surname"];
 			$user->usmail = $data["usmail"];
-			$user->uspoint = 0; 
+			$user->uspoint = 0;
 			$user->birth = $birth->format('Y-m-d');
 			$query = $user
 						->from()
@@ -64,19 +65,19 @@
 							"usid" => "user.usid"
 						))
 						->execute(true); // tek data olduğu için true
-			
+
 			if (is_array($query))
 			{
 				$this->saveLog($data, "", "", "R");
 				return array("exist" => 1);
 			}
-			
+
 			$userId = $this->generateUserId();
 			// use session
 			$authKey = $this->generateAuthKey();
 			$user->usid = $userId;
 			$user->sticket = $authKey;
-			
+
 			$pass = new Userpassword();
 			$pass->usid = $userId;
 
@@ -109,13 +110,13 @@
 				else
 				{
 					$this->saveLog($data, $userId, $authKey, "E");
-					return false;					
+					return false;
 				}
 			}
 			else
 			{
 				$this->saveLog($data, $userId, $authKey, "E");
-				return false;				
+				return false;
 			}
 		}
 
@@ -143,14 +144,46 @@
 				return false;
 			}
 
-			
+			if (isset($data["username"]))
+			{
+				$username = new Username();
+				$name = $username
+							->from()
+							->where("username.usname = :username", [
+								"username" => $data["username"]
+							])
+							->select([
+								"usid" => "usid"
+							])
+							->execute(true);
+				if (is_array($name))
+				{
+					if ($name["usid"] != $user["usid"])
+					{
+						// alınmış kullanıcı id tekrar kullanılamaz
+						return false;
+					}
+				}
+				else
+				{
+					$username->usid = $user["usid"];
+					$username->usname = $data["username"];
+					if ($username->save()) {
+
+					} else {
+						return false;
+					}
+				}
+			}
+
+
 			$req = new Request();
 			$fData = $req->files["file"];
 			// file upload var mı ?
 			if (count($fData) > 0)
 			{
 				$fileId = $this->generateAuthKey();
-				
+
 				$filePath = _FILE_DIR_ . $fileId . ".". pathinfo($fData["name"])["extension"];
 				if (move_uploaded_file($fData["tmp_name"], $filePath))
 				{
@@ -180,7 +213,7 @@
 			}
 
 			if (isset($data["usname"]) ||
-				isset($data["surname"]) || 
+				isset($data["surname"]) ||
 				isset($data["usmail"]) ||
 				isset($data["birth"]))
 			{
@@ -214,7 +247,7 @@
 					$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
 					return false;
 				}
-				
+
 			}
 
 			return 1;
@@ -266,7 +299,7 @@
 				if (count($fData) > 0)
 				{
 					$fileId = $this->generateAuthKey();
-					
+
 					$filePath = _FILE_DIR_ . $fileId . ".". pathinfo($fData["name"])["extension"];
 					if (move_uploaded_file($fData["tmp_name"], $filePath))
 					{
@@ -280,7 +313,7 @@
 						if ($file->save())
 						{
 							$this->saveLog($data, $user["usid"], $data["session_ticket"], "S");
-							
+
 							$questionfile = new Questionfile();
 							$questionfile->qid = $question->qid;
 							$questionfile->fid = $fileId;
@@ -289,7 +322,7 @@
 								$this->saveLog($data, $user["usid"], $data["session_ticket"], "S");
 								return array("exist" => 0, "question_id" => $question->qid);
 							}
-							
+
 							$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
 							return false;
 						}
