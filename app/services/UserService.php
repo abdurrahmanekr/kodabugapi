@@ -75,7 +75,8 @@
 							"uspoint" => "user.uspoint",
 							"birth" => "user.birth",
 							"usmail" => "user.usmail",
-							"usid" => "user.usid"
+							"usid" => "user.usid",
+							"username" => "username.usname"
 						))
 						->execute(true); // tek data olduğu için true
 			if (is_array($query))
@@ -106,6 +107,7 @@
 					"usname" => $query["usname"],
 					"surname" => $query["surname"],
 					"uspoint" => $query["uspoint"],
+					"username" => $query["username"],
 					"usid" => $userId,
 					"photo" => $photo
 				);

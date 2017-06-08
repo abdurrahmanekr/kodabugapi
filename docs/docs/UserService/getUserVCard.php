@@ -63,6 +63,10 @@
 		<td>kullanıcı soyismi</td>
 	</tr>
 	<tr>
+		<td>username</td>
+		<td>kullanıcının eşsiz ismi</td>
+	</tr>
+	<tr>
 		<td>uspoint</td>
 		<td>user_point (kullanıcı puanı)</td>
 	</tr>
@@ -89,6 +93,7 @@
 	fipo: "0",
 	keypo: "0",
 	usname: "Abdurrahman",
+	username: "abdurrahmanekr",
 	surname: "Eker",
 	uspoint: "0",
 	photo: ""
@@ -103,6 +108,7 @@ eğer kendisi çağırmışsa:
 	fipo: "0",
 	keypo: "0",
 	usname: "Abdurrahman",
+	username: "abdurrahmanekr",
 	surname: "Eker",
 	uspoint: "0",
 	photo: "",
