@@ -81,7 +81,7 @@
 			$pass = new Userpassword();
 			$pass->usid = $userId;
 
-			$pass->password = md5(md5($userId . "mustafa sandal ama kürekte yok") . $userId . "ne var ne yok dopin yoksa sana madalya yok" . $data["password"] . md5("kormada var gül diye sevdiğim dikende var"));
+			$pass->password = md5(md5($userId . "--kodabug--" . $userId . "--kodabug--" . $data["password"]));
 
 			// kullanıcı puanı
 			$point = new Point();
@@ -144,6 +144,39 @@
 				return false;
 			}
 
+			if (isset($data["password"]) &&
+				isset($data["newpassword"]))
+			{
+				$userId = $user["usid"];
+				$password = new Userpassword();
+				$password->password = md5(md5($userId . "--kodabug--" . $userId . "--kodabug--" . $data["password"]));
+				$user = $password
+							->from()
+							->where("userpassword.usid = :id && userpassword.password = :pass", array(
+								"id" => $userId,
+								"pass" => $password->password
+							))
+							->select(array(
+								"usid" => "usid"
+							))
+							->execute(true);
+
+				if (is_array($user)) {
+					$password->password = md5(md5($userId . "--kodabug--" . $userId . "--kodabug--" . $data["newpassword"]));
+
+					if ($password->update("usid = :userid", ["userid" => $userId]))
+					{
+						$this->saveLog($data, $userId, $data["session_ticket"], "S");
+						return 1;
+					}
+
+				} else {
+					$this->saveLog($data, $userId, $data["session_ticket"], "E");
+					return false;
+				}
+
+			}
+
 			if (isset($data["username"]))
 			{
 				$username = new Username();
@@ -168,10 +201,25 @@
 				{
 					$username->usid = $user["usid"];
 					$username->usname = $data["username"];
-					if ($username->save()) {
 
+					// kişi daha önceden almış mı
+					$name = $username
+								->from()
+								->where("username.usid = :usid", [
+									"usid" => $user["usid"]
+								])
+								->select([
+									"usid" => "usid"
+								])
+								->execute(true);
+					if (is_array($name)) {
+						// güncelle
+						if(!$username->update("usid = :userid", ["userid" => $user["usid"]]))
+							return false;
 					} else {
-						return false;
+						// kaydet
+						if (!$username->save())
+							return false;
 					}
 				}
 			}
@@ -232,22 +280,6 @@
 					$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
 					return false;
 				}
-			}
-
-			if (isset($data["password"]))
-			{
-				$password = new Userpassword();
-				$password->password = md5(md5($user["usid"] . "mustafa sandal ama kürekte yok") . $user["usid"] . "ne var ne yok dopin yoksa sana madalya yok" . $data["password"] . md5("kormada var gül diye sevdiğim dikende var"));
-				if ($password->update("usid = :userid", ["userid" => $user["usid"]]))
-				{
-					$this->saveLog($data, $user["usid"], $data["session_ticket"], "S");
-				}
-				else
-				{
-					$this->saveLog($data, $user["usid"], $data["session_ticket"], "E");
-					return false;
-				}
-
 			}
 
 			return 1;

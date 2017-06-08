@@ -1,7 +1,8 @@
 <p><a href="#"><?=$_GET['service']?></a> / <?=$_GET['method']?></p>
 
 <p class="description-method">
-	Kullanıcı profil ayarlarını güncelleyeceği service
+	Kullanıcı profil ayarlarını güncelleyeceği service, kullancı şifre güncellemek istiyorsa sadece şifre değişikliği yapabilir
+	Diğer ayarları yapması için şifre göndermemesi yeterli. Güvenlik kontrolü için yapıldı
 </p>
 
 <p>
@@ -12,6 +13,7 @@
 	"usmail": "info@avarekodcu.com",
 	"birth": "10-09-1996",
 	"password": "EkerAvareP^'!:",
+	"newpassword": "kodabugele",
 	"session_ticket": "QWJkdXJyYWhtYW4gZWtlcg=="
 }</pre>
 </p>
@@ -45,6 +47,10 @@
 	<tr>
 		<td>password</td>
 		<td>Kullanıcı şifresi</td>
+	</tr>
+	<tr>
+		<td>newpassword</td>
+		<td>Kullanıcı yeni şifresi</td>
 	</tr>
 	<tr>
 		<td>session_ticket</td>

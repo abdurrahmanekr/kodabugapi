@@ -148,7 +148,7 @@
 							->from()
 							->where("userpassword.usid = :id && userpassword.password = :pass", array(
 								"id" => $userId,
-								"pass" => md5(md5($userId . "mustafa sandal ama kürekte yok") . $userId . "ne var ne yok dopin yoksa sana madalya yok" . $password . md5("kormada var gül diye sevdiğim dikende var"))
+								"pass" => md5(md5($userId . "--kodabug--" . $userId . "--kodabug--" . $password))
 							))
 							->select(array(
 								"usid" => "usid"
