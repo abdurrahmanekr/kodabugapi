@@ -1,7 +1,8 @@
 <p><a href="#"><?=$_GET['service']?></a> / <?=$_GET['method']?></p>
 
 <p class="description-method">
-	Kuruktaki oyuna cevap vermek için kullanılır. Bu service çağrıldığında kullanıcı cevabını işaretlemiştir, eğer bu service'de kullanıcı yanlış işaretlemişse oyun hakkı diğerine geçer
+	Kuruktaki oyuna cevap vermek için kullanılır. Bu service çağrıldığında kullanıcı cevabını işaretlemiştir, eğer bu service'de kullanıcı yanlış işaretlemişse oyun hakkı diğerine geçer.
+	Kullanıcı try değerini -1 gönderirse oyunu kaybeder
 </p>
 
 <p>
