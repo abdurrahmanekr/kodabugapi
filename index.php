@@ -1,7 +1,7 @@
 <?php
 
 	/**
-	 * @author Abdurrahman Eker 
+	 * @author Abdurrahman Eker
 	 * date: 12.10.2016
 	 * time: 21:21 - 09:21 PM
 	 */

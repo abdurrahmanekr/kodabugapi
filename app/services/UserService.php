@@ -94,7 +94,7 @@
 							))
 							->execute(true);
 				if (is_array($photo) && file_exists(_FILE_DIR_ . $photo["fid"] . "." . $photo["ftype"]))
-					$photo = "data:image/". $photo["ftype"] . ";base64," . base64_encode(file_get_contents(_FILE_DIR_ . $photo["fid"] . "." . $photo["ftype"]));
+					$photo = _SITE_URL_ . "/user-images/" . $photo["fid"] . "." . $photo["ftype"];
 				else
 					$photo = "";
 

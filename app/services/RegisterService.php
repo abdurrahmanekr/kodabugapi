@@ -230,11 +230,38 @@
 			// file upload var mı ?
 			if (count($fData) > 0)
 			{
-				$fileId = $this->generateAuthKey();
+				$fileData = new File();
+				$issetPhoto = $fileData
+						->from()
+						->where("file.usid = :usid AND file.ffunction = 'P'", [
+							"usid" => $user["usid"]
+						])
+						->select([
+							"*"
+						])
+						->execute(true);
+				if (is_array($issetPhoto)) {
+					$fileId = $issetPhoto["fid"];
+					if (file_exists($issetPhoto["fpath"])) {
+						unlink($issetPhoto["fpath"]);
+					}
+				}
+				else
+					$fileId = $this->generateAuthKey();
 
 				$filePath = _FILE_DIR_ . $fileId . ".". pathinfo($fData["name"])["extension"];
 				if (move_uploaded_file($fData["tmp_name"], $filePath))
 				{
+					if (is_array($issetPhoto)) {
+						$fileData->usid = $issetPhoto["usid"];
+						$fileData->fname = $fData["name"];
+						$fileData->ftype = pathinfo($fData["name"])["extension"];
+						$fileData->ffunction = "P";
+						$fileData->fpath = $filePath;
+						if ($fileData->update("fid = :fidWhere", ["fidWhere" => $fileId]))
+							return 1;
+						return false;
+					}
 					$file = new File();
 					$file->fid = $fileId;
 					$file->usid = $user["usid"];
