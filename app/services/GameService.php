@@ -1,5 +1,5 @@
 <?php
-	
+
 	/**
 	* @author: Abdurrahman Eker
 	* date : 06.11.2016
@@ -40,7 +40,8 @@
 								->where("qid = :qid", ["qid" => $_SESSION["questionId"]])
 								->select([
 									"qname" => "qname",
-									"qoption" => "qoption"
+									"qoption" => "qoption",
+									"qtype" => "qtype",
 								])
 								->execute(true);
 				if (!is_array($query))
@@ -48,6 +49,8 @@
 					$this->saveLog($data, "", "", "E");
 					return false;
 				}
+
+				$query["qoption"] = json_decode($query["qoption"]);
 
 				return $query;
 			}

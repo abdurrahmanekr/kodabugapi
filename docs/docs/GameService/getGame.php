@@ -37,12 +37,17 @@
 		<td>qoption</td>
 		<td>Sorunun şıkları</td>
 	</tr>
+	<tr>
+		<td>qtype</td>
+		<td>Sorunun tipi</td>
+	</tr>
 </table>
 <!-- örnek cevap -->
 <h3>Gelen Örnek Cevap</h3>
 <p>
 <pre>{
 	"qname" : "var değişken tanımlamada kullanılan ifadenin gerçek anlamı nedir ?",
-	"qoption" : "['variable','varable', 'value', 'vatikan']",
+	"qoption" : ["variable","varable", "value", "vatikan"],
+	"qtype": "1"
 }</pre>
 </p>
